@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>rxswift | why so serious</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  
+  <meta name="description" content="基本 RxSwift 是在 Apple 推出 Swift 后， ReactiveX 推出 Reactive Extensions 系列一个实现库。但是学习 RxSwift 不是学习如何使用第三方库，而是学习一个思想。  编程范式 编程范型、编程范式或程序设计法（英语：Programming paradigm），（范即模范、典范之意，范式即模式、方法），是一类典型的编程风格，是指从事软件工程的一类典">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxSwift">
+<meta property="og:url" content="https://felixplusplus.github.io/2018/07/24/rxswift/index.html">
+<meta property="og:site_name" content="why so serious">
+<meta property="og:description" content="基本 RxSwift 是在 Apple 推出 Swift 后， ReactiveX 推出 Reactive Extensions 系列一个实现库。但是学习 RxSwift 不是学习如何使用第三方库，而是学习一个思想。  编程范式 编程范型、编程范式或程序设计法（英语：Programming paradigm），（范即模范、典范之意，范式即模式、方法），是一类典型的编程风格，是指从事软件工程的一类典">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-03T05:57:40.437Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxSwift">
+<meta name="twitter:description" content="基本 RxSwift 是在 Apple 推出 Swift 后， ReactiveX 推出 Reactive Extensions 系列一个实现库。但是学习 RxSwift 不是学习如何使用第三方库，而是学习一个思想。  编程范式 编程范型、编程范式或程序设计法（英语：Programming paradigm），（范即模范、典范之意，范式即模式、方法），是一类典型的编程风格，是指从事软件工程的一类典">
+  
+    <link rel="alternate" href="/atom.xml" title="why so serious" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-rxswift" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      RxSwift
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/24/rxswift/" class="article-date">
+	  <time datetime="2018-07-24T06:32:19.000Z" itemprop="datePublished">2018-07-24</time>
+	</a>
+
+      
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h1><blockquote>
+<p>RxSwift 是在 Apple 推出 Swift 后， ReactiveX 推出 Reactive Extensions 系列一个实现库。但是学习 RxSwift 不是学习如何使用第三方库，而是学习一个思想。</p>
+</blockquote>
+<h2 id="编程范式"><a href="#编程范式" class="headerlink" title="编程范式"></a>编程范式</h2><blockquote>
+<p>编程范型、编程范式或程序设计法（英语：Programming paradigm），（范即模范、典范之意，范式即模式、方法），是一类典型的编程风格，是指从事软件工程的一类典型的风格（可以对照方法学）。如：函数式编程、程序编程、面向对象编程、指令式编程等等为不同的编程范型。<br>编程范型提供了（同时决定了）程序员对程序执行的看法。例如，在面向对象编程中，程序员认为程序是一系列相互作用的对象，而在函数式编程中一个程序会被看作是一个无状态的函数计算的序列。</p>
+</blockquote>
+<h2 id="函数式"><a href="#函数式" class="headerlink" title="函数式"></a>函数式</h2><blockquote>
+<p>简单说，”函数式编程”是一种”编程范式”（programming paradigm），也就是如何编写程序的方法论。它属于”结构化编程”的一种，主要思想是把运算过程尽量写成一系列嵌套的函数调用。</p>
+</blockquote>
+<h2 id="响应式"><a href="#响应式" class="headerlink" title="响应式"></a>响应式</h2><blockquote>
+<p>在计算机中，响应式编程或反应式编程（英语：Reactive programming）是一种面向数据流和变化传播的编程范式。这意味着可以在编程语言中很方便地表达静态或动态的数据流，而相关的计算模型会自动将变化的值通过数据流进行传播。</p>
+</blockquote>
+<h1 id="RxSwift核心"><a href="#RxSwift核心" class="headerlink" title="RxSwift核心"></a>RxSwift核心</h1><ul>
+<li>Observable    可观测序列</li>
+<li>Observer      观察者</li>
+<li>Operator      创建变化组合事件</li>
+<li>Disposable    管理订阅生命周期</li>
+<li>Schedulers    线程队列</li>
+</ul>
+<h2 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h2><p>简单来说 ， Observable即使可被观察的序列 ， 就像数组一样：[1,2,3,4,5]</p>
+<p>而我对Observable的理解则是加上了时间维度的数组 ， 这个数组会随着时间的变化而变化 。</p>
+<p>在这里你可以想象一下温度的变化 : [35,35.1,35.4,38,爆炸]<br>               海平面的升高 : [海拔100m，海拔110m，海拔112m]<br>大概这样理解比较直观 。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> numbers: <span class="type">Observable</span>&lt;<span class="type">Int</span>&gt; = <span class="type">Observable</span>.create &#123; observer -&gt; <span class="type">Disposable</span> <span class="keyword">in</span></span><br><span class="line">            </span><br><span class="line">            observer.onNext(<span class="number">0</span>)</span><br><span class="line">            observer.onNext(<span class="number">1</span>)</span><br><span class="line">            observer.onNext(<span class="number">2</span>)</span><br><span class="line">            observer.onNext(<span class="number">3</span>)</span><br><span class="line">            observer.onNext(<span class="number">4</span>)</span><br><span class="line">            observer.onNext(<span class="number">5</span>)</span><br><span class="line">            observer.onNext(<span class="number">6</span>)</span><br><span class="line">            observer.onNext(<span class="number">7</span>)</span><br><span class="line">            observer.onNext(<span class="number">8</span>)</span><br><span class="line">            observer.onNext(<span class="number">9</span>)</span><br><span class="line">            observer.onCompleted()</span><br><span class="line">            <span class="keyword">return</span> <span class="type">Disposables</span>.create()</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="number">_</span> = numbers.takeUntil(<span class="keyword">self</span>.rx.deallocated).subscribe(onNext: &#123; a <span class="keyword">in</span></span><br><span class="line">            <span class="built_in">print</span>(a)</span><br><span class="line">        &#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Observer"><a href="#Observer" class="headerlink" title="Observer"></a>Observer</h2><p>Observer 是一个订阅者 ， 它可以观察「可被观察序列」的变化</p>
+<h3 id="AnyObserver"><a href="#AnyObserver" class="headerlink" title="AnyObserver"></a>AnyObserver</h3><h3 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h3><h2 id="Operator"><a href="#Operator" class="headerlink" title="Operator"></a>Operator</h2><h2 id="Disposable"><a href="#Disposable" class="headerlink" title="Disposable"></a>Disposable</h2><h2 id="Schedulers"><a href="#Schedulers" class="headerlink" title="Schedulers"></a>Schedulers</h2><h1 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h1><h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1>
+      
+    </div>
+    <footer class="article-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="/js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/Felixplusplus/payMe/master/weichatpay.jpeg',
+  alipayImage: 'https://raw.githubusercontent.com/Felixplusplus/payMe/master/alipay.jpeg'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/25/NSCache/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          NSCache
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/24/aop/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">AOP</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本"><span class="nav-number">1.</span> <span class="nav-text">基本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编程范式"><span class="nav-number">1.1.</span> <span class="nav-text">编程范式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数式"><span class="nav-number">1.2.</span> <span class="nav-text">函数式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应式"><span class="nav-number">1.3.</span> <span class="nav-text">响应式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RxSwift核心"><span class="nav-number">2.</span> <span class="nav-text">RxSwift核心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Observable"><span class="nav-number">2.1.</span> <span class="nav-text">Observable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Observer"><span class="nav-number">2.2.</span> <span class="nav-text">Observer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AnyObserver"><span class="nav-number">2.2.1.</span> <span class="nav-text">AnyObserver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Binder"><span class="nav-number">2.2.2.</span> <span class="nav-text">Binder</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Operator"><span class="nav-number">2.3.</span> <span class="nav-text">Operator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Disposable"><span class="nav-number">2.4.</span> <span class="nav-text">Disposable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Schedulers"><span class="nav-number">2.5.</span> <span class="nav-text">Schedulers</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MVVM"><span class="nav-number">3.</span> <span class="nav-text">MVVM</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例"><span class="nav-number">4.</span> <span class="nav-text">示例</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 why so serious All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            why so serious
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Felix plus All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

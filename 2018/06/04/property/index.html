@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>关于objective-c的property | why so serious</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Objective-C" />
+  
+  
+  
+  
+  <meta name="description" content="一点关于Objective-C中合成存取器@property的总结在日常开发中，我们一般会使用 1@property (nonatomic,strong) Obj *obj 这样的表现形式来修饰当前对象的成员属性，大家都知道，相对于手工创建成员变量，@property等于变量加Getter&amp;amp;Setter，那么先让我们看下日常的用法，一下为一些常用的关键字：   atomic nonatom">
+<meta name="keywords" content="Objective-C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Objective-C的Property">
+<meta property="og:url" content="https://felixplusplus.github.io/2018/06/04/property/index.html">
+<meta property="og:site_name" content="why so serious">
+<meta property="og:description" content="一点关于Objective-C中合成存取器@property的总结在日常开发中，我们一般会使用 1@property (nonatomic,strong) Obj *obj 这样的表现形式来修饰当前对象的成员属性，大家都知道，相对于手工创建成员变量，@property等于变量加Getter&amp;amp;Setter，那么先让我们看下日常的用法，一下为一些常用的关键字：   atomic nonatom">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-03T05:52:06.126Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Objective-C的Property">
+<meta name="twitter:description" content="一点关于Objective-C中合成存取器@property的总结在日常开发中，我们一般会使用 1@property (nonatomic,strong) Obj *obj 这样的表现形式来修饰当前对象的成员属性，大家都知道，相对于手工创建成员变量，@property等于变量加Getter&amp;amp;Setter，那么先让我们看下日常的用法，一下为一些常用的关键字：   atomic nonatom">
+  
+    <link rel="alternate" href="/atom.xml" title="why so serious" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-property" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      关于Objective-C的Property
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/06/04/property/" class="article-date">
+	  <time datetime="2018-06-04T12:53:32.000Z" itemprop="datePublished">2018-06-04</time>
+	</a>
+
+      
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一点关于Objective-C中合成存取器-property的总结"><a href="#一点关于Objective-C中合成存取器-property的总结" class="headerlink" title="一点关于Objective-C中合成存取器@property的总结"></a>一点关于Objective-C中合成存取器@property的总结</h1><p>在日常开发中，我们一般会使用</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) Obj *obj</span><br></pre></td></tr></table></figure>
+<p>这样的表现形式来修饰当前对象的成员属性，大家都知道，相对于手工创建成员变量，@property等于变量加Getter&amp;Setter，那么先让我们看下日常的用法，一下为一些常用的关键字：</p>
+<hr>
+<ul>
+<li>atomic <strong>nonatomic</strong></li>
+<li>readonly</li>
+<li>assign</li>
+<li><strong>strong</strong></li>
+<li>weak</li>
+<li>copy</li>
+<li>unsafe_unretained</li>
+<li>retain</li>
+</ul>
+<hr>
+<p>下面分别简单介绍一下各个修饰符代表的意思</p>
+<h2 id="atomic-nonatomic"><a href="#atomic-nonatomic" class="headerlink" title="atomic/nonatomic"></a>atomic/nonatomic</h2><p>atoimc与nonatomic是对应的属性，其中，nonatomic表示非线程安全的，优点是内存开销小，相对而言的缺点是在多线程访问的过程中并不安全，但是atomic也不保证一定就会线程安全，为了保证属性访问的线程安全，我们需要对成员变量的读取加锁，这一节不对锁过多做介绍，日常中大部分的读取属性我们都是使用非线程安全的nonatomic。</p>
+<h2 id="readonly"><a href="#readonly" class="headerlink" title="readonly"></a>readonly</h2><p>我们一般将property叫做合成存取器，因为它帮我们自动生成了getter&amp;setter方法，readonly则表示在自动生成存取方法的时候，不生成getter方法，也就是说在类对抗外部不能直接对类实例的该属性进行赋值操作，当我们不显式设定readonly的时候，合成存取则默认为readwrite，即外部可读可写。</p>
+<h2 id="assign"><a href="#assign" class="headerlink" title="assign"></a>assign</h2><p>assign常用于简单数据类型，含义为当前属性仅仅用于赋值操作，并不会持有该属性，亦不会增加该属性的引用计数，若该属性为对象类型则如果该属性销毁时并不会通知当前类对象，所以指针仍然指向之前的内存地址，这是调用get该属性时会导致野指针。</p>
+<h2 id="strong"><a href="#strong" class="headerlink" title="strong"></a>strong</h2><p>strong从字面来理解就是【强】的意思，那么当property声明为strong时，表示该对象对该属性为强引用关系，会增加该成员属性的引用计数，所以该字段只能用于修饰对象类型而不能修饰基本类型。这样当自动释放池检查对象的饮用计数时，只要当前类对象未释放则该属性引用计数就不会为0。在该属性被赋值时会先增加新值的引用计数，再减少旧值的引用计数。</p>
+<h2 id="weak"><a href="#weak" class="headerlink" title="weak"></a>weak</h2><p>weak最常使用的场景时为标记该属性为代理，避免循环引用的时候，与strong恰恰相反，表示对该属性赋值时并不会增加其引用计数，也不会减少旧值的引用计数，属于‘虽然从当前对象能查看到这个对象，但是没啥关系’的那种。当该属性被销毁时property会自动置为nil，防止野指针。</p>
+<h2 id="copy"><a href="#copy" class="headerlink" title="copy"></a>copy</h2><p>copy常用语修饰block与字符串，由copy修饰的对象复制操作时会从内存空间拷贝一份，注意，不要用copy修饰可变类型如NSMutableArray等。</p>
+<h2 id="unsafe-unretained"><a href="#unsafe-unretained" class="headerlink" title="unsafe_unretained"></a>unsafe_unretained</h2><p>大部分同assign，不同在于unsafe_unretained仅可用来修饰基本数据类型</p>
+<h2 id="retain"><a href="#retain" class="headerlink" title="retain"></a>retain</h2><p>大部分同strong，由于再arc下辣鸡自动回收，所以不怎么使用该修饰。在MRC下基本等同与strong。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="/js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/Felixplusplus/payMe/master/weichatpay.jpeg',
+  alipayImage: 'https://raw.githubusercontent.com/Felixplusplus/payMe/master/alipay.jpeg'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/10/load/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          浅谈ObjC中load方法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/14/kvo/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">KVO</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一点关于Objective-C中合成存取器-property的总结"><span class="nav-number">1.</span> <span class="nav-text">一点关于Objective-C中合成存取器@property的总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#atomic-nonatomic"><span class="nav-number">1.1.</span> <span class="nav-text">atomic/nonatomic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readonly"><span class="nav-number">1.2.</span> <span class="nav-text">readonly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#assign"><span class="nav-number">1.3.</span> <span class="nav-text">assign</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#strong"><span class="nav-number">1.4.</span> <span class="nav-text">strong</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#weak"><span class="nav-number">1.5.</span> <span class="nav-text">weak</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#copy"><span class="nav-number">1.6.</span> <span class="nav-text">copy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#unsafe-unretained"><span class="nav-number">1.7.</span> <span class="nav-text">unsafe_unretained</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#retain"><span class="nav-number">1.8.</span> <span class="nav-text">retain</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 why so serious All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            why so serious
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Felix plus All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>

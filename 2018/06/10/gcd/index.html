@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>浅谈gcd | why so serious</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  
+  <meta name="description" content="基本概念进程 进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体  线程 线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。  队列 队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈GCD">
+<meta property="og:url" content="https://felixplusplus.github.io/2018/06/10/gcd/index.html">
+<meta property="og:site_name" content="why so serious">
+<meta property="og:description" content="基本概念进程 进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体  线程 线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。  队列 队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-03T05:57:40.435Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈GCD">
+<meta name="twitter:description" content="基本概念进程 进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体  线程 线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。  队列 队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入">
+  
+    <link rel="alternate" href="/atom.xml" title="why so serious" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-gcd" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      浅谈GCD
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/06/10/gcd/" class="article-date">
+	  <time datetime="2018-06-10T08:46:48.000Z" itemprop="datePublished">2018-06-10</time>
+	</a>
+
+      
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><blockquote>
+<p>进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体</p>
+</blockquote>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><blockquote>
+<p>线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。</p>
+</blockquote>
+<h2 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h2><blockquote>
+<p>队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入操作，在前端（称为front）进行删除操作。队列的操作方式和堆栈类似，唯一的区别在于队列只允许新数据在后端进行添加。</p>
+</blockquote>
+<h2 id="同步-异步"><a href="#同步-异步" class="headerlink" title="同步/异步"></a>同步/异步</h2><p>可以这么理解：（知乎）</p>
+<pre><code>假如你要做两件事，烧水、刷牙
+同步：你烧水，等水烧开了你再去刷牙
+异步：你烧水，不等水烧开就去刷牙了，水烧开了会发出声音告诉你（callback），然后你再处理水烧开之后的事情
+只要你是个正常人，都会选择第二种
+当然也有特殊情况，那个人喜欢用热水刷牙
+</code></pre><h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><blockquote>
+<p>指两个或多个事件在同一时间间隔内发生。可以在某条线程和其他线程之间反复多次进行上下文切换，看上去就好像一个CPU能够并且执行多个线程一样。其实是伪异步。</p>
+</blockquote>
+<h2 id="线程队列中并行-串行"><a href="#线程队列中并行-串行" class="headerlink" title="线程队列中并行/串行"></a>线程队列中并行/串行</h2><blockquote>
+<p>串行队列：串行队列的特点是队列内的线程是一个一个执行，直到结束。并行队列：并行队列的特点是队列中所有线程的执行结束时必须是一块的，队列中其他线程执行完毕后，会阻塞当前线程等待队列中其他线程执行，然后一块执行完毕。</p>
+</blockquote>
+<h1 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h1><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">DispatchQueue</span>.global().async &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"do something in global \(Thread.current)"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="type">DispatchQueue</span>.main.async &#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"do something in main \(Thread.current)"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里使用了全局的队列执行一些任务 ， 然后切回主队列 , 这里要注意主队列是运行在主线程上的任务堆栈 。</p>
+<h2 id="自定义队列"><a href="#自定义队列" class="headerlink" title="自定义队列"></a>自定义队列</h2><p>除了使用全局队列外我们还可以使用自定义的队列</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>)</span><br></pre></td></tr></table></figure>
+<p>初始化一个队列最简单的方式就是声明它的标签 。</p>
+<h2 id="async"><a href="#async" class="headerlink" title="async"></a>async</h2><p> 现在 ，你可以打开Xcode ， 新建一个commandLineTool工程和我一起练习 。</p>
+<p>打开main.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>)</span><br><span class="line"></span><br><span class="line">q.sync &#123;</span><br><span class="line">    (<span class="number">1</span>...<span class="number">5</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍎 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">q.async &#123;</span><br><span class="line">    (<span class="number">6</span>...<span class="number">10</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍇 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">(<span class="number">11</span>...<span class="number">15</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"🍌 \(Thread.current) + \(i)"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>上面我们先是声明一个队列 , 使用sync添加一个同步的任务输出1到5 ， 使用async异步输出6到10 ， 同时在主线程打印11到15 。</p>
+<p>按下command+R运行project ，我们可以看到一下输出</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">1</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">2</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">3</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">4</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">5</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">11</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">6</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">12</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">7</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">13</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">8</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">14</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">9</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">15</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">10</span></span><br><span class="line"><span class="type">Program</span> ended with exit code: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>我们可以看到 ， 🍎代表的任务全部是优先执行的 ， 这说明sync添加的任务会阻塞当前线程 ， 在看到🍌和🍇是均匀分部的 。 这是由于async添加的任务会默认加入由系统管理的线程池 ， 异步执行 。</p>
+<h2 id="优先级-QoS"><a href="#优先级-QoS" class="headerlink" title="优先级 QoS"></a>优先级 QoS</h2><p>当多个队列同时执行的时候 ， 系统需要知道哪个队列优先级更高 ， 才能优先安排计算资源给他 ， 我们可以这样定义优先级：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>, qos: <span class="type">DispatchQoS</span>.background)</span><br></pre></td></tr></table></figure>
+<p>初始化的时候加上qos参数 ， qos（quality of service）从字面上理解就是「服务质量」，在swift中是这样定义的：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">QoSClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> background</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> utility</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> `<span class="keyword">default</span>`</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> userInitiated</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> userInteractive</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> unspecified</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">init</span>?(rawValue: qos_class_t)</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">var</span> rawValue: qos_class_t &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>User Interactive： 和用户交互相关，比如动画等等优先级最高。比如用户连续拖拽的计算</li>
+<li>User Initiated： 需要立刻的结果，比如push一个ViewController之前的数据计算</li>
+<li>Utility： 可以执行很长时间，再通知用户结果。比如下载一个文件，给用户下载进度。</li>
+<li>Background： 用户不可见，比如在后台存储大量数据</li>
+</ul>
+<p>在选择时你要先思考一下几个问题 。<br>    这个任务是用户可见的吗？<br>    这个任务和用户交互有关吗？<br>    这个任务的执行时间有多少？<br>    这个任务的最终结果和UI有关系吗？</p>
+<h2 id="并发队列"><a href="#并发队列" class="headerlink" title="并发队列"></a>并发队列</h2><p>默认情况下添加进Queue的任务会串行执行 ， 先执行完一个再执行下一个：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>)</span><br><span class="line"></span><br><span class="line">q.async &#123;</span><br><span class="line">    (<span class="number">1</span>...<span class="number">5</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍎 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">q.async &#123;</span><br><span class="line">    (<span class="number">6</span>...<span class="number">10</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍇 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">(<span class="number">11</span>...<span class="number">15</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"🍌 \(Thread.current) + \(i)"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>运行看下日志输出</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">1</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">11</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">2</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">12</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">3</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">13</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">4</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">14</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">5</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">15</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">6</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">7</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">8</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">9</span></span><br><span class="line"><span class="type">Program</span> ended with exit code: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>我们可以看到直到🍎都输出完毕才会输出🍇 ， 有时候我们想把任务并行执行 ， 怎么办呢 。<br>这里我们可以设置queue的Attributes 。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>, attributes: <span class="type">DispatchQueue</span>.<span class="type">Attributes</span>.concurrent)</span><br></pre></td></tr></table></figure>
+<p>再运行下 。 看看会怎样输出吧 .</p>
+<h2 id="DispatchWorkItem"><a href="#DispatchWorkItem" class="headerlink" title="DispatchWorkItem"></a>DispatchWorkItem</h2><p>有的时候 ， 对于同一个操作我们有可能会放在不同的线程中去执行 ， 这样我们就可以把这个操作用DispatchWorkItem的形式包裹起来 ， 在不同的线程中执行 。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> group = <span class="type">DispatchGroup</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>, attributes: <span class="type">DispatchQueue</span>.<span class="type">Attributes</span>.concurrent)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> item1 = <span class="type">DispatchWorkItem</span> &#123;</span><br><span class="line">    (<span class="number">1</span>...<span class="number">5</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍎 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> item2 = <span class="type">DispatchWorkItem</span> &#123;</span><br><span class="line">    (<span class="number">6</span>...<span class="number">10</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍇 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">q.async(execute: item1)</span><br><span class="line"></span><br><span class="line">q.async(execute: item2)</span><br><span class="line"></span><br><span class="line">(<span class="number">11</span>...<span class="number">15</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"🍌 \(Thread.current) + \(i)"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Group"><a href="#Group" class="headerlink" title="Group"></a>Group</h2><p>DispatchGroup 可以用来管理一组队列 ， 监听所有队列的所有任务都完成的通知 ，比较常用的就是在一个页面请求多个接口的时候 ，全部请求完再刷新UI 。</p>
+<p>pass</p>
+<h2 id="延时执行"><a href="#延时执行" class="headerlink" title="延时执行"></a>延时执行</h2><p>pass</p>
+<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>pass</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总之 ， 使用GCD一方面会提升我们应用的性能 ， 给用户带来更好的体验 ， 另一方面使用得当也能解决线程安全等问题 。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="/js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/Felixplusplus/payMe/master/weichatpay.jpeg',
+  alipayImage: 'https://raw.githubusercontent.com/Felixplusplus/payMe/master/alipay.jpeg'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/06/10/local/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          iOS国际化小结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/10/load/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">浅谈ObjC中load方法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#进程"><span class="nav-number">1.1.</span> <span class="nav-text">进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程"><span class="nav-number">1.2.</span> <span class="nav-text">线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#队列"><span class="nav-number">1.3.</span> <span class="nav-text">队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步-异步"><span class="nav-number">1.4.</span> <span class="nav-text">同步/异步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发"><span class="nav-number">1.5.</span> <span class="nav-text">并发</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程队列中并行-串行"><span class="nav-number">1.6.</span> <span class="nav-text">线程队列中并行/串行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本用法"><span class="nav-number">2.</span> <span class="nav-text">基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义队列"><span class="nav-number">2.1.</span> <span class="nav-text">自定义队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#async"><span class="nav-number">2.2.</span> <span class="nav-text">async</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优先级-QoS"><span class="nav-number">2.3.</span> <span class="nav-text">优先级 QoS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发队列"><span class="nav-number">2.4.</span> <span class="nav-text">并发队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DispatchWorkItem"><span class="nav-number">2.5.</span> <span class="nav-text">DispatchWorkItem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Group"><span class="nav-number">2.6.</span> <span class="nav-text">Group</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延时执行"><span class="nav-number">2.7.</span> <span class="nav-text">延时执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程安全"><span class="nav-number">2.8.</span> <span class="nav-text">线程安全</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 why so serious All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            why so serious
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 Felix plus All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
