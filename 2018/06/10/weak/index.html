@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>浅谈objective-c中的weak | why so serious</title>
+  <title>浅谈objective-c中的weak | 匀昊的旧笔记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   <meta name="keywords" content="Objective-C" />
@@ -16,7 +16,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈Objective-C中的weak">
 <meta property="og:url" content="https://felixplusplus.github.io/2018/06/10/weak/index.html">
-<meta property="og:site_name" content="why so serious">
+<meta property="og:site_name" content="匀昊的旧笔记">
 <meta property="og:description" content="日常开发中我们使用weak大部分是为了修饰属性引用计数，防止循环引用、内存泄漏的作用，那么他的原理是什么呢， 原理简介 Runtime维护了一个weak表，用于存储指向某个对象的所有weak指针。weak表其实是一个hash（哈希）表，Key是所指对象的地址，Value是weak指针的地址（这个地址的值是所指对象的地址）数组。   初始化时：runtime会调用objc_initWeak函数，初始">
 <meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2018-08-03T05:57:40.437Z">
@@ -24,7 +24,7 @@
 <meta name="twitter:title" content="浅谈Objective-C中的weak">
 <meta name="twitter:description" content="日常开发中我们使用weak大部分是为了修饰属性引用计数，防止循环引用、内存泄漏的作用，那么他的原理是什么呢， 原理简介 Runtime维护了一个weak表，用于存储指向某个对象的所有weak指针。weak表其实是一个hash（哈希）表，Key是所指对象的地址，Value是weak指针的地址（这个地址的值是所指对象的地址）数组。   初始化时：runtime会调用objc_initWeak函数，初始">
   
-    <link rel="alternate" href="/atom.xml" title="why so serious" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="匀昊的旧笔记" type="application/atom+xml">
   
 
   
@@ -314,7 +314,7 @@ var a = new Donate({
   <div class="container">
       	<div class="row">
 	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
-	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 why so serious All Rights Reserved.</p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 匀昊的旧笔记 All Rights Reserved.</p>
 	      
 	      
     		<p class="busuanzi_uv">
@@ -465,10 +465,10 @@ var a = new Donate({
         </div>
          <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
           <div class="panel-body">
-            why so serious
+            匀昊的旧笔记
           </div>
           <div class="panel-body">
-            Copyright © 2018 Felix plus All Rights Reserved.
+            Copyright © 2018 匀昊 All Rights Reserved.
           </div>
         </div>
       </div>

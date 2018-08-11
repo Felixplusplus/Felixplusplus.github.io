@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用swift搭建简易区块链并实现使用webapi进行调度 | 匀昊的旧笔记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  
+  <meta name="description" content="Reason最近特别好奇比特币为啥那么贵 ， 那么多人去炒 ， 所以先了解一下区块链 ， 并使用swift实现一个练练手 BlockChain 所谓区块链技术 ， 简称BT（Blockchain technology），也被称之为分布式账本技术，是一种互联网数据库技术，其特点是去中心化、公开透明，让每个人均可参与数据库记录。  Base 交易（Transaction）：一次操作，导致账本状态的一次">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用swift搭建简易区块链并实现使用webApi进行调度">
+<meta property="og:url" content="https://felixplusplus.github.io/2018/08/11/swiftBlockChain/index.html">
+<meta property="og:site_name" content="匀昊的旧笔记">
+<meta property="og:description" content="Reason最近特别好奇比特币为啥那么贵 ， 那么多人去炒 ， 所以先了解一下区块链 ， 并使用swift实现一个练练手 BlockChain 所谓区块链技术 ， 简称BT（Blockchain technology），也被称之为分布式账本技术，是一种互联网数据库技术，其特点是去中心化、公开透明，让每个人均可参与数据库记录。  Base 交易（Transaction）：一次操作，导致账本状态的一次">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-11T09:48:15.631Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用swift搭建简易区块链并实现使用webApi进行调度">
+<meta name="twitter:description" content="Reason最近特别好奇比特币为啥那么贵 ， 那么多人去炒 ， 所以先了解一下区块链 ， 并使用swift实现一个练练手 BlockChain 所谓区块链技术 ， 简称BT（Blockchain technology），也被称之为分布式账本技术，是一种互联网数据库技术，其特点是去中心化、公开透明，让每个人均可参与数据库记录。  Base 交易（Transaction）：一次操作，导致账本状态的一次">
+  
+    <link rel="alternate" href="/atom.xml" title="匀昊的旧笔记" type="application/atom+xml">
+  
+
+  
+
+  <link rel="icon" href="/css/images/mylogo.jpg">
+  <link rel="apple-touch-icon" href="/css/images/mylogo.jpg">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+
+  
+    <link rel="stylesheet" href="/css/dialog.css">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="/css/header-post.css" >
+  
+
+  
+  
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+</head>
+
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  <div id="container">
+    <div id="wrap">
+      
+        <header>
+
+    <div id="allheader" class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="navbar-inner">
+          
+          <div class="container"> 
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
+            
+              <a class="brand" style="
+                 margin-top: 0px;"  
+                href="#" data-toggle="modal" data-target="#myModal" >
+                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+              </a>
+            
+            
+            <div class="navbar-collapse collapse">
+              <ul class="hnav navbar-nav">
+                
+                  <li> <a class="main-nav-link" href="/">Home</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
+                
+                  <li> <a class="main-nav-link" href="/about">About</a> </li>
+                
+                  <li><div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div></li>
+            </div>
+          </div>
+                
+      </div>
+    </div>
+
+</header>
+
+
+
+      
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-swiftBlockChain" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      使用swift搭建简易区块链并实现使用webApi进行调度
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/08/11/swiftBlockChain/" class="article-date">
+	  <time datetime="2018-08-11T03:28:28.000Z" itemprop="datePublished">2018-08-11</time>
+	</a>
+
+      
+      
+	<a class="article-views">
+	<span id="busuanzi_container_page_pv">
+		PV:<span id="busuanzi_value_page_pv"></span>
+	</span>
+	</a>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Reason"><a href="#Reason" class="headerlink" title="Reason"></a>Reason</h1><p>最近特别好奇比特币为啥那么贵 ， 那么多人去炒 ， 所以先了解一下区块链 ， 并使用swift实现一个练练手</p>
+<h1 id="BlockChain"><a href="#BlockChain" class="headerlink" title="BlockChain"></a>BlockChain</h1><blockquote>
+<p>所谓区块链技术 ， 简称BT（Blockchain technology），也被称之为分布式账本技术，是一种互联网数据库技术，其特点是去中心化、公开透明，让每个人均可参与数据库记录。</p>
+</blockquote>
+<h2 id="Base"><a href="#Base" class="headerlink" title="Base"></a>Base</h2><ul>
+<li>交易（Transaction）：一次操作，导致账本状态的一次改变，如添加一条记录；</li>
+<li>区块（Block）：记录一段时间内发生的交易和状态结果，是对当前账本状态的一次共识；</li>
+<li>链（Chain）：由一个个区块按照发生顺序串联而成，是整个状态变化的日志记录。</li>
+</ul>
+<blockquote>
+<p>如果把区块链作为一个状态机，则每次交易就是试图改变一次状态，而每次共识生成的区块，就是参与者对于区块中所有交易内容导致状态改变的结果进行确认。</p>
+</blockquote>
+<h2 id="阐述"><a href="#阐述" class="headerlink" title="阐述"></a>阐述</h2><blockquote>
+<p>用通俗的话阐述：如果我们把数据库假设成一本账本，读写数据库就可以看做一种记账的行为，区块链技术的原理就是在一段时间内找出记账最快最好的人，由这个人来记账，然后将账本的这一页信息发给整个系统里的其他所有人。这也就相当于改变数据库所有的记录，发给全网的其他每个节点，所以区块链技术也称为分布式账本（distributed ledger）。</p>
+</blockquote>
+<h1 id="Vapor"><a href="#Vapor" class="headerlink" title="Vapor"></a>Vapor</h1><p>既然要用swift实现 ， 我在这里就选择vapor作为服务端框架来使用 ， vapor里面有意思的东西很多 ， 这里只介绍基本的操作而不深究其原理 。</p>
+<h2 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h2><p>前置条件 ， 这里我们使用macOS进行开发部署 ， 以下是需要软件和版本。</p>
+<ul>
+<li>Install Xcode 9.3 or greater from the Mac App Store.</li>
+<li>Vapor requires Swift 4.1 or greater.</li>
+<li>Vapor Toolbox: 3.1.7</li>
+<li>Vapor Framework: 3.0.8</li>
+<li>homeBrew</li>
+</ul>
+<p>接着使用homeBrew安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install vapor/tap/vapor</span><br></pre></td></tr></table></figure>
+<h2 id="Get-Started"><a href="#Get-Started" class="headerlink" title="Get Started"></a>Get Started</h2><p>现在vapor已经装好了 ， 我们可以先把基本的准备工作弄好</p>
+<p>使用vapor初始化工程</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vapor new blockChainServer</span><br></pre></td></tr></table></figure>
+<p>生成工程文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vapor xcode</span><br></pre></td></tr></table></figure>
+<p>接着打开 blockChainServer.xcodeproj 文件 ， 在导航上的schema上选择 run ，接着按下 command + R </p>
+<p>这时你应能够在控制台看到输出的server地址了</p>
+<h1 id="Practice"><a href="#Practice" class="headerlink" title="Practice"></a>Practice</h1><p>到现在我们一切准备工作都就绪了 ， 那么开始鼓捣个区块链api出来吧 。</p>
+<h2 id="Base-model"><a href="#Base-model" class="headerlink" title="Base model"></a>Base model</h2><p>区块链的基本概念上面介绍了 ， 包含以下几类 ， 我们使用oop可以抽象出以下一堆class</p>
+<ul>
+<li>Transaction     交易</li>
+<li>Block           区块</li>
+<li>Blockchain      区块链</li>
+<li>BlockChainNode  区块链节点</li>
+</ul>
+<p>排列由下向上存在集合关系 。 </p>
+<p>其实这里面最后应该加上一个区块网络 ， 不过这里我们暂时不需要实现全部网络 ， 搞个内网的先耍耍就好</p>
+<p>下面分别来看下几个model的代码</p>
+<p>ps:这里的框架添加的协议和扩展很多 ， 不在此过多介绍 ， 请把关注点放在class本身</p>
+<p>Transaction.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"><span class="keyword">import</span> FluentSQLite</span><br><span class="line"><span class="keyword">import</span> Vapor</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Transaction</span>: <span class="title">Codable</span>,<span class="title">SQLiteModel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> id: <span class="type">Int</span>?</span><br><span class="line">    <span class="keyword">var</span> from: <span class="type">String</span></span><br><span class="line">    <span class="keyword">var</span> to: <span class="type">String</span></span><br><span class="line">    <span class="keyword">var</span> amount: <span class="type">Double</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(from: <span class="type">String</span>, to: <span class="type">String</span>, amount: <span class="type">Double</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.from = from</span><br><span class="line">        <span class="keyword">self</span>.to = to</span><br><span class="line">        <span class="keyword">self</span>.amount = amount</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Transaction</span>: <span class="title">Content</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Transaction</span>: <span class="title">Migration</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Transaction</span>: <span class="title">Parameter</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<p>这里我们可以看到定义了几个property ， </p>
+<ul>
+<li>id是SQLiteModel协议需要实现的 ， 这里只要记住是为了数据持久化就好</li>
+<li>to : 交易的接收方</li>
+<li>from : 交易的发起方</li>
+<li>amount : 金额</li>
+</ul>
+<p>Block.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> FluentSQLite</span><br><span class="line"><span class="keyword">import</span> Vapor</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Block</span>: <span class="title">Codable</span>,<span class="title">SQLiteModel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> id: <span class="type">Int</span>?</span><br><span class="line">    <span class="keyword">var</span> index: <span class="type">Int</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">var</span> dateCreated: <span class="type">String</span></span><br><span class="line">    <span class="keyword">var</span> previousHash: <span class="type">String</span>!</span><br><span class="line">    <span class="keyword">var</span> hash: <span class="type">String</span>!</span><br><span class="line">    <span class="keyword">var</span> nonce: <span class="type">Int</span></span><br><span class="line">    <span class="keyword">var</span> message: <span class="type">String</span> = <span class="string">""</span></span><br><span class="line">    <span class="keyword">private</span> (<span class="keyword">set</span>) <span class="keyword">var</span> transactions: [<span class="type">Transaction</span>] = [<span class="type">Transaction</span>]()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> key: <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">get</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> transactionsData = <span class="keyword">try</span>! <span class="type">JSONEncoder</span>().encode(transactions)</span><br><span class="line">            <span class="keyword">let</span> transactionsJSONString = <span class="type">String</span>(data: transactionsData, encoding: .utf8)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> <span class="type">String</span>(index) + dateCreated + previousHash + transactionsJSONString! + <span class="type">String</span>(nonce)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    @discardableResult</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">addTransaction</span><span class="params">(transaction: Transaction)</span></span> -&gt; <span class="type">Block</span>&#123;</span><br><span class="line">        transactions.append(transaction)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>() &#123;</span><br><span class="line">        dateCreated = <span class="type">Date</span>().<span class="built_in">toString</span>()</span><br><span class="line">        nonce = <span class="number">0</span></span><br><span class="line">        message = <span class="string">"挖出新的区块"</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(transaction: <span class="type">Transaction</span>) &#123;</span><br><span class="line">        dateCreated = <span class="type">Date</span>().<span class="built_in">toString</span>()</span><br><span class="line">        nonce = <span class="number">0</span></span><br><span class="line">        addTransaction(transaction: transaction)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Block</span>: <span class="title">Content</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Block</span>: <span class="title">Migration</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Block</span>: <span class="title">Parameter</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>index : 区块序号</li>
+<li>dateCreated : 创建日期</li>
+<li>previousHash : 前一个区块的哈希值 </li>
+<li>hash : 当前区块的哈希值</li>
+<li>nonce : 先记住和工作量证明有关 </li>
+<li>message : 这里是为了我们看到输出</li>
+</ul>
+<p>Blockchain.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"><span class="keyword">import</span> FluentSQLite</span><br><span class="line"><span class="keyword">import</span> Vapor</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Blockchain</span>: <span class="title">Codable</span>,<span class="title">SQLiteModel</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> id: <span class="type">Int</span>?</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> blocks: [<span class="type">Block</span>] = [<span class="type">Block</span>]()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>() &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(<span class="number">_</span> genesisBlock: <span class="type">Block</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.addBlock(genesisBlock)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">addBlock</span><span class="params">(<span class="number">_</span> block: Block)</span></span> &#123;</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">self</span>.blocks.isEmpty &#123;</span><br><span class="line">            <span class="comment">// 添加创世区块</span></span><br><span class="line">            <span class="comment">// 第一个区块没有 previous hash</span></span><br><span class="line">            block.previousHash = <span class="string">"0"</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> previousBlock = getPreviousBlock()</span><br><span class="line">            block.previousHash = previousBlock.hash</span><br><span class="line">            block.index = <span class="keyword">self</span>.blocks.<span class="built_in">count</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        block.hash = generateHash(<span class="keyword">for</span>: block)</span><br><span class="line">        <span class="keyword">self</span>.blocks.append(block)</span><br><span class="line">        block.message = <span class="string">"此区块已添加至区块链"</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">getPreviousBlock</span><span class="params">()</span></span> -&gt; <span class="type">Block</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.blocks[<span class="keyword">self</span>.blocks.<span class="built_in">count</span> - <span class="number">1</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">displayBlock</span><span class="params">(<span class="number">_</span> block: Block)</span></span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"------ 第 \(block.index) 个区块 --------"</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"创建日期：\(block.dateCreated)"</span>)</span><br><span class="line">        <span class="comment">// print("数据：\(block.data)")</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Nonce：\(block.nonce)"</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"前一个区块的哈希值：\(block.previousHash!)"</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"哈希值：\(block.hash!)"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">func</span> <span class="title">generateHash</span><span class="params">(<span class="keyword">for</span> block: Block)</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> hash = block.key.sha1Hash()</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 设置工作量证明</span></span><br><span class="line">        <span class="keyword">while</span>(!hash.hasPrefix(<span class="string">"11"</span>)) &#123;</span><br><span class="line">            block.nonce += <span class="number">1</span></span><br><span class="line">            hash = block.key.sha1Hash()</span><br><span class="line">            <span class="built_in">print</span>(hash)</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> hash</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Blockchain</span>: <span class="title">Content</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Blockchain</span>: <span class="title">Migration</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Blockchain</span>: <span class="title">Parameter</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<p>BlockChainNode.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> FluentSQLite</span><br><span class="line"><span class="keyword">import</span> Vapor</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockChainNode</span>: <span class="title">Codable</span>,<span class="title">SQLiteModel</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> id: <span class="type">Int</span>?</span><br><span class="line">    <span class="keyword">var</span> address :<span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>(addr:<span class="type">String</span>) &#123;</span><br><span class="line">        address = addr</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">BlockChainNode</span>: <span class="title">Content</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">BlockChainNode</span>: <span class="title">Migration</span> </span>&#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">BlockChainNode</span>: <span class="title">Parameter</span> </span>&#123; &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>address : 节点地址</li>
+</ul>
+<h2 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h2><p>这里涉及到的事件主要是计算hash ， 我们在这里面给String 添加一个extension</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">String</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">sha1Hash</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> task = <span class="type">Process</span>()</span><br><span class="line">        task.launchPath = <span class="string">"/usr/bin/shasum"</span></span><br><span class="line">        task.arguments = []</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> inputPipe = <span class="type">Pipe</span>()</span><br><span class="line">        </span><br><span class="line">        inputPipe.fileHandleForWriting.write(<span class="keyword">self</span>.data(using: .utf8)!)</span><br><span class="line">        </span><br><span class="line">        inputPipe.fileHandleForWriting.closeFile()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> outputPipe = <span class="type">Pipe</span>()</span><br><span class="line">        task.standardOutput = outputPipe</span><br><span class="line">        task.standardInput = inputPipe</span><br><span class="line">        task.launch()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> data = outputPipe.fileHandleForReading.readDataToEndOfFile()</span><br><span class="line">        <span class="keyword">let</span> hash = <span class="type">String</span>(data: data, encoding: .utf8)!</span><br><span class="line">        <span class="keyword">return</span> hash.replacingOccurrences(of: <span class="string">"  -\n"</span>, with: <span class="string">""</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>给date也添加一个便于我们输出区块创建时间</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Date</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">toString</span><span class="params">()</span></span> -&gt; <span class="type">String</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> formatter = <span class="type">DateFormatter</span>()</span><br><span class="line">        formatter.dateFormat = <span class="string">"yyyy-MM-dd HH:mm:ss"</span></span><br><span class="line">        <span class="keyword">return</span> formatter.string(from: <span class="keyword">self</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><p>在这里我们把所有对区块链的操作抽象为一个service类</p>
+<p>BlockchainService.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"><span class="keyword">import</span> Vapor</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BlockchainService</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> blockchain: <span class="type">Blockchain</span> = <span class="type">Blockchain</span>()</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">var</span> nodes = [<span class="type">BlockChainNode</span>]()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">init</span>() &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">addBlock</span><span class="params">(<span class="number">_</span> block: Block)</span></span> -&gt; <span class="type">Block</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.blockchain.addBlock(block)</span><br><span class="line">        <span class="keyword">return</span> block</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">getLastBlock</span><span class="params">()</span></span> -&gt; <span class="type">Block</span> &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">guard</span> <span class="keyword">let</span> lastB = <span class="keyword">self</span>.blockchain.blocks.last <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> addBlock(<span class="type">Block</span>())</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> lastB;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">getBlockchain</span><span class="params">()</span></span> -&gt; <span class="type">Blockchain</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.blockchain</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">registerNode</span><span class="params">(<span class="number">_</span> node:BlockChainNode)</span></span> -&gt; <span class="type">BlockChainNode</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.nodes.append(node)</span><br><span class="line">        <span class="keyword">return</span> node</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">getAllNodes</span><span class="params">()</span></span> -&gt; [<span class="type">BlockChainNode</span>] &#123;</span><br><span class="line">        <span class="keyword">return</span> nodes</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Controller-amp-Router"><a href="#Controller-amp-Router" class="headerlink" title="Controller &amp; Router"></a>Controller &amp; Router</h2><p>这里我们基本完成了所有基本模型的搭建 ， 现在需要对我们的server进行操作 ， 让我们可以方便的通过curl调用我们的区块链系统 。</p>
+<p>BlockChainController.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"><span class="keyword">import</span> Vapor</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">BCError</span>:<span class="title">LocalizedError</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> name:<span class="type">String</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockChainController</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> bcService = <span class="type">BlockchainService</span>()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">addBlock</span><span class="params">(<span class="number">_</span> req: Request)</span></span> <span class="keyword">throws</span> -&gt; <span class="type">Future</span>&lt;<span class="type">Block</span>&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> bcService.addBlock(<span class="type">Block</span>()).save(on: req)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">addTransaction</span><span class="params">(<span class="number">_</span> req: Request)</span></span> <span class="keyword">throws</span> -&gt; <span class="type">Future</span>&lt;<span class="type">Block</span>&gt; &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">try</span> req.content.decode(<span class="type">Transaction</span>.<span class="keyword">self</span>).flatMap&#123; transation <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">self</span>.bcService.getLastBlock().addTransaction(transaction: transation).save(on: req)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">findBlockChain</span><span class="params">(<span class="number">_</span> req: Request)</span></span> <span class="keyword">throws</span> -&gt; <span class="type">Future</span>&lt;<span class="type">Blockchain</span>&gt; &#123;</span><br><span class="line">        <span class="keyword">return</span> bcService.getBlockchain().save(on: req)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">registeNode</span><span class="params">(<span class="number">_</span> req: Request)</span></span> <span class="keyword">throws</span> -&gt; <span class="type">Future</span>&lt;<span class="type">BlockChainNode</span>&gt; &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">try</span> req.content.decode(<span class="type">BlockChainNode</span>.<span class="keyword">self</span>).flatMap&#123; node <span class="keyword">in</span></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">self</span>.bcService.registerNode(node).save(on: req)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">allNodes</span><span class="params">(<span class="number">_</span> req: Request)</span></span> <span class="keyword">throws</span> -&gt; <span class="type">Future</span>&lt;[<span class="type">BlockChainNode</span>]&gt; &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="type">BlockChainNode</span>.query(on: req).all()</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">resolve</span><span class="params">(<span class="number">_</span> req: Request)</span></span> <span class="keyword">throws</span> -&gt; <span class="type">Future</span>&lt;<span class="type">Blockchain</span>&gt; &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">let</span> promise = req.eventLoop.newPromise(<span class="type">Blockchain</span>.<span class="keyword">self</span>)</span><br><span class="line">        </span><br><span class="line">        bcService.getAllNodes().forEach &#123; node <span class="keyword">in</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">guard</span> <span class="keyword">let</span> url = <span class="type">URL</span>(string: <span class="string">"http://\(node.address)/blockchain"</span>) <span class="keyword">else</span> &#123;<span class="keyword">return</span> promise.fail(error: <span class="type">BCError</span>(name: <span class="string">"node error"</span>))&#125;</span><br><span class="line">            </span><br><span class="line">            <span class="type">URLSession</span>.shared.dataTask(with: url, completionHandler: &#123; (data, <span class="number">_</span>, <span class="number">_</span>) <span class="keyword">in</span></span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">let</span> data = data &#123;</span><br><span class="line">                    <span class="keyword">guard</span> <span class="keyword">let</span> bc = <span class="keyword">try</span>? <span class="type">JSONDecoder</span>().decode(<span class="type">Blockchain</span>.<span class="keyword">self</span>, from: data) <span class="keyword">else</span> &#123;<span class="keyword">return</span> promise.fail(error: <span class="type">BCError</span>(name: <span class="string">"json error"</span>))&#125;</span><br><span class="line">                    </span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">self</span>.bcService.getBlockchain().blocks.<span class="built_in">count</span> &lt; bc.blocks.<span class="built_in">count</span> &#123;</span><br><span class="line">                        <span class="keyword">self</span>.bcService.getBlockchain().blocks = bc.blocks</span><br><span class="line">                    &#125;</span><br><span class="line">                    promise.succeed(result: <span class="keyword">self</span>.bcService.getBlockchain())</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    promise.fail(error: <span class="type">BCError</span>(name: <span class="string">"data Error"</span>))</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;).resume()</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> promise.futureResult</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>routes.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vapor</span><br><span class="line"></span><br><span class="line"><span class="comment">/// Register your application's routes here.</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> <span class="title">routes</span><span class="params">(<span class="number">_</span> router: Router)</span></span> <span class="keyword">throws</span> &#123;</span><br><span class="line">    <span class="comment">// Basic "Hello, world!" example</span></span><br><span class="line">    router.<span class="keyword">get</span>(<span class="string">"hello"</span>) &#123; req <span class="keyword">in</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello, world!"</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> bcc = <span class="type">BlockChainController</span>()</span><br><span class="line">    router.post(<span class="string">"block"</span>, use: bcc.addBlock)</span><br><span class="line">    router.post(<span class="string">"transaction"</span>, use: bcc.addTransaction)</span><br><span class="line">    router.<span class="keyword">get</span>(<span class="string">"blockchain"</span>, use: bcc.findBlockChain)</span><br><span class="line">    router.post(<span class="string">"node"</span>, use: bcc.registeNode)</span><br><span class="line">    router.<span class="keyword">get</span>(<span class="string">"node"</span>, use: bcc.allNodes)</span><br><span class="line">    router.post(<span class="string">"resolve"</span>, use: bcc.resolve)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在解释一下我们注册的api都是干啥的</p>
+<p>ps:API层遵守restfull</p>
+<ul>
+<li>post(“block”, use: bcc.addBlock) 增加一个区块</li>
+<li>post(“transaction”, use: bcc.addTransaction) 新增一笔交易</li>
+<li>get(“blockchain”, use: bcc.findBlockChain) 查询区块链</li>
+<li>post(“node”, use: bcc.registeNode) 增加节点</li>
+<li>get(“node”, use: bcc.allNodes) 获取全部节点</li>
+<li>post(“resolve”, use: bcc.resolve) 解决冲突</li>
+</ul>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>下面我们可以让服务运行起来 ， 然后通过curl命令行来调用区块链系统 ，</p>
+<h3 id="编译工程"><a href="#编译工程" class="headerlink" title="编译工程"></a>编译工程</h3><p>进入我们的工程目录 ， 执行命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vapor build</span><br></pre></td></tr></table></figure>
+<p>你应能看到以下输出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Building Project [Done]</span><br></pre></td></tr></table></figure>
+<p>这说明我们的工程可以运行了</p>
+<h3 id="运行工程"><a href="#运行工程" class="headerlink" title="运行工程"></a>运行工程</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vapor run serve --port=8080</span><br></pre></td></tr></table></figure>
+<p>我们在本地8080端口上开启我们的服务</p>
+<p>这时应能看到如下输出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Running blockChainServer ...</span><br><span class="line">[ INFO ] Migrating <span class="string">'sqlite'</span> database (/Users/felix/Documents/TestFolder/blockChainServer/.build/checkouts/fluent.git-6251908308727715749/Sources/Fluent/Migration/MigrationConfig.swift:69)</span><br><span class="line">[ INFO ] Preparing migration <span class="string">'Todo'</span> (/Users/felix/Documents/TestFolder/blockChainServer/.build/checkouts/fluent.git-6251908308727715749/Sources/Fluent/Migration/Migrations.swift:111)</span><br><span class="line">[ INFO ] Preparing migration <span class="string">'Block'</span> (/Users/felix/Documents/TestFolder/blockChainServer/.build/checkouts/fluent.git-6251908308727715749/Sources/Fluent/Migration/Migrations.swift:111)</span><br><span class="line">[ INFO ] Preparing migration <span class="string">'Blockchain'</span> (/Users/felix/Documents/TestFolder/blockChainServer/.build/checkouts/fluent.git-6251908308727715749/Sources/Fluent/Migration/Migrations.swift:111)</span><br><span class="line">[ INFO ] Preparing migration <span class="string">'BlockChainNode'</span> (/Users/felix/Documents/TestFolder/blockChainServer/.build/checkouts/fluent.git-6251908308727715749/Sources/Fluent/Migration/Migrations.swift:111)</span><br><span class="line">[ INFO ] Migrations complete (/Users/felix/Documents/TestFolder/blockChainServer/.build/checkouts/fluent.git-6251908308727715749/Sources/Fluent/Migration/MigrationConfig.swift:73)</span><br><span class="line">[Deprecated] --option=value syntax is deprecated. Please use --option value (with no =) instead.</span><br><span class="line">Server starting on http://localhost:8080</span><br></pre></td></tr></table></figure>
+<p>现在我们只要用api调用以下 ， 本机的区块链系统就会响应了 ， 让我们试一下吧</p>
+<h3 id="创建区块"><a href="#创建区块" class="headerlink" title="创建区块"></a>创建区块</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s -X POST localhost:8080/block</span><br></pre></td></tr></table></figure>
+<p>你会在一段时间后看到响应</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:19:01"</span>,</span><br><span class="line">    <span class="attr">"hash"</span>: <span class="string">"1124aa2a5867abee8b9cc3a3f4051b6665f89e26"</span>,</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"index"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">    <span class="attr">"nonce"</span>: <span class="number">193</span>,</span><br><span class="line">    <span class="attr">"previousHash"</span>: <span class="string">"0"</span>,</span><br><span class="line">    <span class="attr">"transactions"</span>: []</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们的第一个block已经创建成功并且被加入区块链里了 ， 他的previousHash为“0”是因为他是创世区块 。</p>
+<h3 id="添加交易"><a href="#添加交易" class="headerlink" title="添加交易"></a>添加交易</h3><p>我们可以在这里添加几笔交易看看</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s -X POST localhost:8080/transaction --data <span class="string">"from=Felix&amp;to=mayun&amp;amount=100"</span> | python -m json.tool</span><br></pre></td></tr></table></figure>
+<p>data里面表示 Felix向mayun转账100 每次添加后你将会得到区块的最新信息</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:19:01"</span>,</span><br><span class="line">    <span class="attr">"hash"</span>: <span class="string">"1124aa2a5867abee8b9cc3a3f4051b6665f89e26"</span>,</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"index"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">    <span class="attr">"nonce"</span>: <span class="number">193</span>,</span><br><span class="line">    <span class="attr">"previousHash"</span>: <span class="string">"0"</span>,</span><br><span class="line">    <span class="attr">"transactions"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"amount"</span>: <span class="number">100</span>,</span><br><span class="line">            <span class="attr">"from"</span>: <span class="string">"Felix"</span>,</span><br><span class="line">            <span class="attr">"to"</span>: <span class="string">"mayun"</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="查询链"><a href="#查询链" class="headerlink" title="查询链"></a>查询链</h3><p>我们可以重复以上操作几次 。</p>
+<p>然后查看整个区块链信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s -X GET localhost:8080/blockchain | python -m json.tool</span><br></pre></td></tr></table></figure>
+<p>你会看到蕾丝如下输出</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"blocks"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:19:01"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"1124aa2a5867abee8b9cc3a3f4051b6665f89e26"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">193</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"0"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">100</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"Felix"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"mayun"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">100</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"Felix"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"mayun"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:27:39"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"11bec5f7bf8226c62119adfbb03ad37d24267092"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">277</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"1124aa2a5867abee8b9cc3a3f4051b6665f89e26"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">100</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"Felix"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"mayun"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">100</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"Felix"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"mayun"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以看到Felix不停的向mayun转100块 ， 真不要脸 。</p>
+<h3 id="节点以及解决冲突"><a href="#节点以及解决冲突" class="headerlink" title="节点以及解决冲突"></a>节点以及解决冲突</h3><p>区块链同时存在与多个主机上 ， 也就是说会有很多的block-chain-server运行 ， 而对于不同的运算会有多个解产生 ， 这就是冲突问题了 ， 那么我们看下冲突解决的过程吧</p>
+<p>首先 ， 我们在8081端口同时开启一个服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vapor run serve --port=8081</span><br></pre></td></tr></table></figure>
+<p>然后添加几个区块和交易 ， 因为我们要验证解决冲突 ， 所以应该比运行在8080端口上的区块多 。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s -X POST localhost:8081/block | python -m json.tool</span><br></pre></td></tr></table></figure>
+<p>重复几次操作 ， 最后看下8081伤的blockchain</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"blocks"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:35:15"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"1152cb1aac50abd803a4589f28c7e054db207e23"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">215</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"0"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:37:18"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"1127f8c712ae3205ccbab9788392bcd190b8b6b1"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">380</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"1152cb1aac50abd803a4589f28c7e054db207e23"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:37:39"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"11b5d293c3068081f1771f14f96a3e450f282171"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">3</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">64</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"1127f8c712ae3205ccbab9788392bcd190b8b6b1"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:37:45"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"11d97dfca7cc7a67c22b9df06017768fca0a193f"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">4</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">3</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">125</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"11b5d293c3068081f1771f14f96a3e450f282171"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:38:03"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"115a991bd5d2ebe6e232b421965ab852b97a4202"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">5</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">4</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">220</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"11d97dfca7cc7a67c22b9df06017768fca0a193f"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们要让8080知道有这么一个节点</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s -X POST localhost:8080/node --data <span class="string">"address=localhost:8081"</span> | python -m json.tool</span><br></pre></td></tr></table></figure>
+<p>我们会看到节点已经注册成功了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"address"</span>: <span class="string">"localhost:8081"</span>,</span><br><span class="line">    <span class="string">"id"</span>: 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这时我们让8080去主动解决冲突</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s -X POST localhost:8080/resolve | python -m json.tool</span><br></pre></td></tr></table></figure>
+<p>再查看8080上的区块链 ， 发现已经被替换为较长的8081上的blocks了。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"blocks"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:35:15"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"1152cb1aac50abd803a4589f28c7e054db207e23"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">215</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"0"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:37:18"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"1127f8c712ae3205ccbab9788392bcd190b8b6b1"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">1</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">380</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"1152cb1aac50abd803a4589f28c7e054db207e23"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:37:39"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"11b5d293c3068081f1771f14f96a3e450f282171"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">3</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">2</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">64</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"1127f8c712ae3205ccbab9788392bcd190b8b6b1"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:37:45"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"11d97dfca7cc7a67c22b9df06017768fca0a193f"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">4</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">3</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">125</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"11b5d293c3068081f1771f14f96a3e450f282171"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">"dateCreated"</span>: <span class="string">"2018-08-11 17:38:03"</span>,</span><br><span class="line">            <span class="attr">"hash"</span>: <span class="string">"115a991bd5d2ebe6e232b421965ab852b97a4202"</span>,</span><br><span class="line">            <span class="attr">"id"</span>: <span class="number">5</span>,</span><br><span class="line">            <span class="attr">"index"</span>: <span class="number">4</span>,</span><br><span class="line">            <span class="attr">"message"</span>: <span class="string">"\u6b64\u533a\u5757\u5df2\u6dfb\u52a0\u81f3\u533a\u5757\u94fe"</span>,</span><br><span class="line">            <span class="attr">"nonce"</span>: <span class="number">220</span>,</span><br><span class="line">            <span class="attr">"previousHash"</span>: <span class="string">"11d97dfca7cc7a67c22b9df06017768fca0a193f"</span>,</span><br><span class="line">            <span class="attr">"transactions"</span>: [</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="attr">"amount"</span>: <span class="number">200</span>,</span><br><span class="line">                    <span class="attr">"from"</span>: <span class="string">"mayun"</span>,</span><br><span class="line">                    <span class="attr">"to"</span>: <span class="string">"Felix"</span></span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="summary"><a href="#summary" class="headerlink" title="summary"></a>summary</h1><p>可以看到大概区块链的设计还是比较有意思的 ， 细节部分请不要在意（比如sha1和prefix“11” 😄）</p>
+<p>基本的介绍就到这里啦 ， 限于本人的水平可能会有错误请不要全信 。</p>
+<p>打扰了 .</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <div id="donation_div"></div>
+
+<script src="/js/vdonate.js"></script>
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://raw.githubusercontent.com/Felixplusplus/payMe/master/weichatpay.jpeg',
+  alipayImage: 'https://raw.githubusercontent.com/Felixplusplus/payMe/master/alipay.jpeg'
+});
+</script>
+      
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+
+      
+      
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/07/25/cocoapod/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">磨刀不误砍柴之cocoapods</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="toc-sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Reason"><span class="nav-number">1.</span> <span class="nav-text">Reason</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BlockChain"><span class="nav-number">2.</span> <span class="nav-text">BlockChain</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Base"><span class="nav-number">2.1.</span> <span class="nav-text">Base</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阐述"><span class="nav-number">2.2.</span> <span class="nav-text">阐述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Vapor"><span class="nav-number">3.</span> <span class="nav-text">Vapor</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Install"><span class="nav-number">3.1.</span> <span class="nav-text">Install</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Get-Started"><span class="nav-number">3.2.</span> <span class="nav-text">Get Started</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Practice"><span class="nav-number">4.</span> <span class="nav-text">Practice</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Base-model"><span class="nav-number">4.1.</span> <span class="nav-text">Base model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Action"><span class="nav-number">4.2.</span> <span class="nav-text">Action</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Service"><span class="nav-number">4.3.</span> <span class="nav-text">Service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Controller-amp-Router"><span class="nav-number">4.4.</span> <span class="nav-text">Controller &amp; Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">4.5.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译工程"><span class="nav-number">4.5.1.</span> <span class="nav-text">编译工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行工程"><span class="nav-number">4.5.2.</span> <span class="nav-text">运行工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建区块"><span class="nav-number">4.5.3.</span> <span class="nav-text">创建区块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加交易"><span class="nav-number">4.5.4.</span> <span class="nav-text">添加交易</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询链"><span class="nav-number">4.5.5.</span> <span class="nav-text">查询链</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点以及解决冲突"><span class="nav-number">4.5.6.</span> <span class="nav-text">节点以及解决冲突</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#summary"><span class="nav-number">5.</span> <span class="nav-text">summary</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      
+      <footer id="footer">
+  
+
+  <div class="container">
+      	<div class="row">
+	      <p> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/iTimeTraveler/hexo-theme-hiker" target="_blank">Hexo-theme-hiker</a> </p>
+	      <p id="copyRightEn">Copyright &copy; 2013 - 2018 匀昊的旧笔记 All Rights Reserved.</p>
+	      
+	      
+    		<p class="busuanzi_uv">
+				UV : <span id="busuanzi_value_site_uv"></span> |  
+				PV : <span id="busuanzi_value_site_pv"></span>
+		    </p>
+  		   
+		</div>
+
+		
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+    var allheader = document.getElementById("allheader");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight + "px";
+    if (allheader != null) {
+      contentdiv.style.minHeight = document.body.offsetHeight - allheader.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    } else {
+      contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    }
+</script>
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/scripts.js"></script>
+
+
+
+
+  <script src="/js/dialog.js"></script>
+
+
+
+
+
+
+
+
+	<div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="myModalLabel">设置</h2>
+      </div>
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+
+
+      <div class="modal-body">
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" onclick="javascript:setFontSize();" aria-expanded="true" aria-controls="collapseOne">
+              正文字号大小
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+            您已调整页面字体大小
+          </div>
+        </div>
+      
+
+
+          <div style="margin:6px;">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" onclick="javascript:setBackground();" aria-expanded="true" aria-controls="collapseTwo">
+              夜间护眼模式
+            </a>
+        </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            夜间模式已经开启，再次单击按钮即可关闭 
+          </div>
+        </div>
+
+        <div>
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;关 于&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+         <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+          <div class="panel-body">
+            匀昊的旧笔记
+          </div>
+          <div class="panel-body">
+            Copyright © 2018 匀昊 All Rights Reserved.
+          </div>
+        </div>
+      </div>
+
+
+      <hr style="margin-top:0px; margin-bottom:0px; width:80%; border-top: 1px solid #000;">
+      <hr style="margin-top:2px; margin-bottom:0px; width:80%; border-top: 3px solid #000;">
+      <div class="modal-footer">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js?v=1.0.0" async=""></script>
+  
+    <a id="menu-switch"><i class="fa fa-bars fa-lg"></i></a>
+  
+</body>
+</html>
