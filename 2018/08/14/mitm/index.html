@@ -3,23 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>浅谈objc中load方法 | 匀昊的旧笔记</title>
+  <title>mitm | 匀昊的旧笔记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
   
   
-  <meta name="description" content="在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换 12345+ (void)load&amp;#123;    Method m = class_getInstanceMethod([self class], @selector(somemethod));    Method m0 = class_getInstanceMethod([self class">
-<meta property="og:type" content="article">
-<meta property="og:title" content="浅谈ObjC中load方法">
-<meta property="og:url" content="https://felixplusplus.github.io/2018/06/10/load/index.html">
+  <meta property="og:type" content="article">
+<meta property="og:title" content="mitm">
+<meta property="og:url" content="https://felixplusplus.github.io/2018/08/14/mitm/index.html">
 <meta property="og:site_name" content="匀昊的旧笔记">
-<meta property="og:description" content="在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换 12345+ (void)load&amp;#123;    Method m = class_getInstanceMethod([self class], @selector(somemethod));    Method m0 = class_getInstanceMethod([self class">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-13T05:13:33.810Z">
+<meta property="og:updated_time" content="2018-08-14T08:28:38.030Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="浅谈ObjC中load方法">
-<meta name="twitter:description" content="在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换 12345+ (void)load&amp;#123;    Method m = class_getInstanceMethod([self class], @selector(somemethod));    Method m0 = class_getInstanceMethod([self class">
+<meta name="twitter:title" content="mitm">
   
     <link rel="alternate" href="/atom.xml" title="匀昊的旧笔记" type="application/atom+xml">
   
@@ -159,7 +156,7 @@
             
       <div id="content" class="outer">
         
-          <section id="main" style="float:none;"><article id="post-load" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+          <section id="main" style="float:none;"><article id="post-mitm" style="width: 75%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
     
     
@@ -167,7 +164,7 @@
         
   
     <h1 class="thumb" class="article-title" itemprop="name">
-      浅谈ObjC中load方法
+      mitm
     </h1>
   
 
@@ -175,8 +172,8 @@
     
     <div class="article-meta">
       
-	<a href="/2018/06/10/load/" class="article-date">
-	  <time datetime="2018-06-10T03:27:09.000Z" itemprop="datePublished">2018-06-10</time>
+	<a href="/2018/08/14/mitm/" class="article-date">
+	  <time datetime="2018-08-14T08:28:38.000Z" itemprop="datePublished">2018-08-14</time>
 	</a>
 
       
@@ -190,19 +187,7 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)load&#123;</span><br><span class="line">    Method m = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">@selector</span>(somemethod));</span><br><span class="line">    Method m0 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="built_in">NSSelectorFromString</span>(<span class="string">@"somemethod"</span>));</span><br><span class="line">    method_exchangeImplementations(m2, m1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>那么，这个load方法是如何执行的，是什么原理呢?</p>
-<p>通过阅读runtime的源代码，我们可以看到这个顺序</p>
-<ol>
-<li>load是在类被添加进runtime开始执行的</li>
-<li>每个load方法只会执行一次</li>
-<li>不会沿用父类的实现</li>
-<li>每个类的父类先执行，然后是子类，最后是category分类 (递归)</li>
-<li>没有[obj sendmsg]的那一套方法查找过程，直接获取函数指针执行</li>
-</ol>
-<p>先就这么多了，欢迎补充</p>
-
+        
       
     </div>
     <footer class="article-footer">
@@ -254,19 +239,10 @@ var a = new Donate({
     
 <nav id="article-nav">
   
-    <a href="/2018/06/10/gcd/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          浅谈GCD
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/06/04/property/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/08/11/swiftBlockChain/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">关于Objective-C的Property</div>
+      <div class="article-nav-title">使用swift搭建简易区块链并实现使用webApi进行调度</div>
     </a>
   
 </nav>
