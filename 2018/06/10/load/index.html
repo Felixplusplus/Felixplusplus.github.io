@@ -6,17 +6,20 @@
   <title>浅谈objc中load方法 | 匀昊的旧笔记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
+  <meta name="keywords" content="Objective-C" />
+  
   
   
   
   <meta name="description" content="在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换 12345+ (void)load&amp;#123;    Method m = class_getInstanceMethod([self class], @selector(somemethod));    Method m0 = class_getInstanceMethod([self class">
+<meta name="keywords" content="Objective-C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈ObjC中load方法">
 <meta property="og:url" content="https://felixplusplus.github.io/2018/06/10/load/index.html">
 <meta property="og:site_name" content="匀昊的旧笔记">
 <meta property="og:description" content="在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换 12345+ (void)load&amp;#123;    Method m = class_getInstanceMethod([self class], @selector(somemethod));    Method m0 = class_getInstanceMethod([self class">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-13T05:13:33.810Z">
+<meta property="og:updated_time" content="2018-08-18T10:50:59.287Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈ObjC中load方法">
 <meta name="twitter:description" content="在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换 12345+ (void)load&amp;#123;    Method m = class_getInstanceMethod([self class], @selector(somemethod));    Method m0 = class_getInstanceMethod([self class">
@@ -91,7 +94,7 @@
               <a class="brand" style="
                  margin-top: 0px;"  
                 href="#" data-toggle="modal" data-target="#myModal" >
-                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+                  <img width="88px" height="88px" alt="Hike News" src="/css/images/mylogo.jpg">
               </a>
             
             
@@ -101,8 +104,6 @@
                   <li> <a class="main-nav-link" href="/">Home</a> </li>
                 
                   <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
-                
-                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
                 
                   <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
                 
@@ -247,6 +248,10 @@ var a = new Donate({
 
       
       
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+      
 
     </footer>
   </div>
@@ -329,8 +334,6 @@ var a = new Donate({
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/categories" class="mobile-nav-link">Categories</a>
   
     <a href="/tags" class="mobile-nav-link">Tags</a>
   

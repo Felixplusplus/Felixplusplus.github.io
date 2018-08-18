@@ -6,20 +6,20 @@
   <title>ios unittest xctest 使用小结 | 匀昊的旧笔记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Objective-C" />
+  <meta name="keywords" content="Objective-CXCTest" />
   
   
   
   
   <meta name="description" content="UT在开发或是维护一些功能的时候，往往我们自以为是的没问题，全弄好了，根本不会出问题（微笑for me）是根本靠不住的，这时候就需要我们掏出单元测试撸一遍，如果没问题再去让测试大大帮我们把关，今天就谈一下iOS测试类XCTest。 使用场景 工具类，和我们的一些外部扩展的方法稳定性 性能测试 网络接口测试  方法介绍123- (void)setUp &amp;#123;    [super setUp];">
-<meta name="keywords" content="Objective-C">
+<meta name="keywords" content="Objective-C,XCTest">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS UnitTest XCTest 使用小结">
 <meta property="og:url" content="https://felixplusplus.github.io/2018/06/10/unitTest/index.html">
 <meta property="og:site_name" content="匀昊的旧笔记">
 <meta property="og:description" content="UT在开发或是维护一些功能的时候，往往我们自以为是的没问题，全弄好了，根本不会出问题（微笑for me）是根本靠不住的，这时候就需要我们掏出单元测试撸一遍，如果没问题再去让测试大大帮我们把关，今天就谈一下iOS测试类XCTest。 使用场景 工具类，和我们的一些外部扩展的方法稳定性 性能测试 网络接口测试  方法介绍123- (void)setUp &amp;#123;    [super setUp];">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-13T05:13:33.809Z">
+<meta property="og:updated_time" content="2018-08-18T10:52:29.983Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS UnitTest XCTest 使用小结">
 <meta name="twitter:description" content="UT在开发或是维护一些功能的时候，往往我们自以为是的没问题，全弄好了，根本不会出问题（微笑for me）是根本靠不住的，这时候就需要我们掏出单元测试撸一遍，如果没问题再去让测试大大帮我们把关，今天就谈一下iOS测试类XCTest。 使用场景 工具类，和我们的一些外部扩展的方法稳定性 性能测试 网络接口测试  方法介绍123- (void)setUp &amp;#123;    [super setUp];">
@@ -94,7 +94,7 @@
               <a class="brand" style="
                  margin-top: 0px;"  
                 href="#" data-toggle="modal" data-target="#myModal" >
-                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+                  <img width="88px" height="88px" alt="Hike News" src="/css/images/mylogo.jpg">
               </a>
             
             
@@ -104,8 +104,6 @@
                   <li> <a class="main-nav-link" href="/">Home</a> </li>
                 
                   <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
-                
-                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
                 
                   <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
                 
@@ -280,6 +278,10 @@ var a = new Donate({
 
       
       
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/XCTest/">XCTest</a></li></ul>
+
+      
 
     </footer>
   </div>
@@ -362,8 +364,6 @@ var a = new Donate({
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/categories" class="mobile-nav-link">Categories</a>
   
     <a href="/tags" class="mobile-nav-link">Tags</a>
   

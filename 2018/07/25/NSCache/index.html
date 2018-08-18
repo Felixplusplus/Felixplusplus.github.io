@@ -6,17 +6,20 @@
   <title>nscache | 匀昊的旧笔记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
+  <meta name="keywords" content="NSCacheObjective-C" />
+  
   
   
   
   <meta name="description" content="基本 NSCache 基本上就是一个会自动移除对象来释放内存的 NSMutableDictionary。无需响应内存警告或者使用计时器来清除缓存。唯一的不同之处是键对象不会像 NSMutableDictionary 中那样被复制，这实际上是它的一个优点（键不需要实现 NSCopying 协议）。  优点 NSCache是一个类似NSDictionary一个可变的集合。 提供了可设置缓存的数目与内存">
+<meta name="keywords" content="NSCache,Objective-C">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NSCache">
 <meta property="og:url" content="https://felixplusplus.github.io/2018/07/25/NSCache/index.html">
 <meta property="og:site_name" content="匀昊的旧笔记">
 <meta property="og:description" content="基本 NSCache 基本上就是一个会自动移除对象来释放内存的 NSMutableDictionary。无需响应内存警告或者使用计时器来清除缓存。唯一的不同之处是键对象不会像 NSMutableDictionary 中那样被复制，这实际上是它的一个优点（键不需要实现 NSCopying 协议）。  优点 NSCache是一个类似NSDictionary一个可变的集合。 提供了可设置缓存的数目与内存">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-13T05:13:33.546Z">
+<meta property="og:updated_time" content="2018-08-18T10:51:55.834Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NSCache">
 <meta name="twitter:description" content="基本 NSCache 基本上就是一个会自动移除对象来释放内存的 NSMutableDictionary。无需响应内存警告或者使用计时器来清除缓存。唯一的不同之处是键对象不会像 NSMutableDictionary 中那样被复制，这实际上是它的一个优点（键不需要实现 NSCopying 协议）。  优点 NSCache是一个类似NSDictionary一个可变的集合。 提供了可设置缓存的数目与内存">
@@ -91,7 +94,7 @@
               <a class="brand" style="
                  margin-top: 0px;"  
                 href="#" data-toggle="modal" data-target="#myModal" >
-                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+                  <img width="88px" height="88px" alt="Hike News" src="/css/images/mylogo.jpg">
               </a>
             
             
@@ -101,8 +104,6 @@
                   <li> <a class="main-nav-link" href="/">Home</a> </li>
                 
                   <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
-                
-                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
                 
                   <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
                 
@@ -264,6 +265,10 @@ var a = new Donate({
 
       
       
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NSCache/">NSCache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+      
 
     </footer>
   </div>
@@ -346,8 +351,6 @@ var a = new Donate({
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/categories" class="mobile-nav-link">Categories</a>
   
     <a href="/tags" class="mobile-nav-link">Tags</a>
   

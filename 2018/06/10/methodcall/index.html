@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="匀昊的旧笔记">
 <meta property="og:description" content="在OC中，我们一般都会写出这样的代码 1[SomeObj someMethod] 实际上这些调用都会转化为  1objc_msgSend(receiver, @selector(message)); 这样的形式 那么。这一切中间经历了怎样的过程呢，下面我们先介绍几个名词 SEL 我们写的OC代码，在编译阶段会对所有方法生成一个ID，用来区分不同的方法，同时只要是是相同的函数名称，这个ID是相同的">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-13T05:13:33.810Z">
+<meta property="og:updated_time" content="2018-08-18T10:51:24.453Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈Objc的call method">
 <meta name="twitter:description" content="在OC中，我们一般都会写出这样的代码 1[SomeObj someMethod] 实际上这些调用都会转化为  1objc_msgSend(receiver, @selector(message)); 这样的形式 那么。这一切中间经历了怎样的过程呢，下面我们先介绍几个名词 SEL 我们写的OC代码，在编译阶段会对所有方法生成一个ID，用来区分不同的方法，同时只要是是相同的函数名称，这个ID是相同的">
@@ -94,7 +94,7 @@
               <a class="brand" style="
                  margin-top: 0px;"  
                 href="#" data-toggle="modal" data-target="#myModal" >
-                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+                  <img width="88px" height="88px" alt="Hike News" src="/css/images/mylogo.jpg">
               </a>
             
             
@@ -104,8 +104,6 @@
                   <li> <a class="main-nav-link" href="/">Home</a> </li>
                 
                   <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
-                
-                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
                 
                   <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
                 
@@ -266,6 +264,10 @@ var a = new Donate({
 
       
       
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
+      
 
     </footer>
   </div>
@@ -348,8 +350,6 @@ var a = new Donate({
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/categories" class="mobile-nav-link">Categories</a>
   
     <a href="/tags" class="mobile-nav-link">Tags</a>
   

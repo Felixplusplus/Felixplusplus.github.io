@@ -238,8 +238,6 @@
         
           <a id="beautifont" class="main-nav-link" href="/archives">Archives</a>
         
-          <a id="beautifont" class="main-nav-link" href="/categories">Categories</a>
-        
           <a id="beautifont" class="main-nav-link" href="/tags">Tags</a>
         
           <a id="beautifont" class="main-nav-link" href="/about">About</a>
@@ -282,24 +280,74 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p class="article-excerpt-content">
-          基本概念进程
-进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体
+        <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><blockquote>
+<p>进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体</p>
+</blockquote>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><blockquote>
+<p>线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。</p>
+</blockquote>
+<h2 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h2><blockquote>
+<p>队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入操作，在前端（称为front）进行删除操作。队列的操作方式和堆栈类似，唯一的区别在于队列只允许新数据在后端进行添加。</p>
+</blockquote>
+<h2 id="同步-异步"><a href="#同步-异步" class="headerlink" title="同步/异步"></a>同步/异步</h2><p>可以这么理解：（知乎）</p>
+<pre><code>假如你要做两件事，烧水、刷牙
+同步：你烧水，等水烧开了你再去刷牙
+异步：你烧水，不等水烧开就去刷牙了，水烧开了会发出声音告诉你（callback），然后你再处理水烧开之后的事情
+只要你是个正常人，都会选择第二种
+当然也有特殊情况，那个人喜欢用热水刷牙
+</code></pre><h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><blockquote>
+<p>指两个或多个事件在同一时间间隔内发生。可以在某条线程和其他线程之间反复多次进行上下文切换，看上去就好像一个CPU能够并且执行多个线程一样。其实是伪异步。</p>
+</blockquote>
+<h2 id="线程队列中并行-串行"><a href="#线程队列中并行-串行" class="headerlink" title="线程队列中并行/串行"></a>线程队列中并行/串行</h2><blockquote>
+<p>串行队列：串行队列的特点是队列内的线程是一个一个执行，直到结束。并行队列：并行队列的特点是队列中所有线程的执行结束时必须是一块的，队列中其他线程执行完毕后，会阻塞当前线程等待队列中其他线程执行，然后一块执行完毕。</p>
+</blockquote>
+<h1 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h1><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">DispatchQueue</span>.global().async &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"do something in global \(Thread.current)"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="type">DispatchQueue</span>.main.async &#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"do something in main \(Thread.current)"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里使用了全局的队列执行一些任务 ， 然后切回主队列 , 这里要注意主队列是运行在主线程上的任务堆栈 。</p>
+<h2 id="自定义队列"><a href="#自定义队列" class="headerlink" title="自定义队列"></a>自定义队列</h2><p>除了使用全局队列外我们还可以使用自定义的队列</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>)</span><br></pre></td></tr></table></figure>
+<p>初始化一个队列最简单的方式就是声明它的标签 。</p>
+<h2 id="async"><a href="#async" class="headerlink" title="async"></a>async</h2><p> 现在 ，你可以打开Xcode ， 新建一个commandLineTool工程和我一起练习 。</p>
+<p>打开main.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>)</span><br><span class="line"></span><br><span class="line">q.sync &#123;</span><br><span class="line">    (<span class="number">1</span>...<span class="number">5</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍎 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">q.async &#123;</span><br><span class="line">    (<span class="number">6</span>...<span class="number">10</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍇 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">(<span class="number">11</span>...<span class="number">15</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"🍌 \(Thread.current) + \(i)"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>上面我们先是声明一个队列 , 使用sync添加一个同步的任务输出1到5 ， 使用async异步输出6到10 ， 同时在主线程打印11到15 。</p>
+<p>按下command+R运行project ，我们可以看到一下输出</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">1</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">2</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">3</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">4</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">5</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">11</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">6</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">12</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">7</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">13</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">8</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">14</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">9</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">15</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">10</span></span><br><span class="line"><span class="type">Program</span> ended with exit code: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>我们可以看到 ， 🍎代表的任务全部是优先执行的 ， 这说明sync添加的任务会阻塞当前线程 ， 在看到🍌和🍇是均匀分部的 。 这是由于async添加的任务会默认加入由系统管理的线程池 ， 异步执行 。</p>
+<h2 id="优先级-QoS"><a href="#优先级-QoS" class="headerlink" title="优先级 QoS"></a>优先级 QoS</h2><p>当多个队列同时执行的时候 ， 系统需要知道哪个队列优先级更高 ， 才能优先安排计算资源给他 ， 我们可以这样定义优先级：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>, qos: <span class="type">DispatchQoS</span>.background)</span><br></pre></td></tr></table></figure>
+<p>初始化的时候加上qos参数 ， qos（quality of service）从字面上理解就是「服务质量」，在swift中是这样定义的：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">QoSClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> background</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> utility</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> `<span class="keyword">default</span>`</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> userInitiated</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> userInteractive</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> unspecified</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">init</span>?(rawValue: qos_class_t)</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">var</span> rawValue: qos_class_t &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>User Interactive： 和用户交互相关，比如动画等等优先级最高。比如用户连续拖拽的计算</li>
+<li>User Initiated： 需要立刻的结果，比如push一个ViewController之前的数据计算</li>
+<li>Utility： 可以执行很长时间，再通知用户结果。比如下载一个文件，给用户下载进度。</li>
+<li>Background： 用户不可见，比如在后台存储大量数据</li>
+</ul>
+<p>在选择时你要先思考一下几个问题 。<br>    这个任务是用户可见的吗？<br>    这个任务和用户交互有关吗？<br>    这个任务的执行时间有多少？<br>    这个任务的最终结果和UI有关系吗？</p>
+<h2 id="并发队列"><a href="#并发队列" class="headerlink" title="并发队列"></a>并发队列</h2><p>默认情况下添加进Queue的任务会串行执行 ， 先执行完一个再执行下一个：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>)</span><br><span class="line"></span><br><span class="line">q.async &#123;</span><br><span class="line">    (<span class="number">1</span>...<span class="number">5</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍎 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">q.async &#123;</span><br><span class="line">    (<span class="number">6</span>...<span class="number">10</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍇 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">(<span class="number">11</span>...<span class="number">15</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"🍌 \(Thread.current) + \(i)"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>运行看下日志输出</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">1</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">11</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">2</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">12</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">3</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">13</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">4</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">14</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">5</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">15</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">6</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">7</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">8</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">9</span></span><br><span class="line"><span class="type">Program</span> ended with exit code: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>我们可以看到直到🍎都输出完毕才会输出🍇 ， 有时候我们想把任务并行执行 ， 怎么办呢 。<br>这里我们可以设置queue的Attributes 。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>, attributes: <span class="type">DispatchQueue</span>.<span class="type">Attributes</span>.concurrent)</span><br></pre></td></tr></table></figure>
+<p>再运行下 。 看看会怎样输出吧 .</p>
+<h2 id="DispatchWorkItem"><a href="#DispatchWorkItem" class="headerlink" title="DispatchWorkItem"></a>DispatchWorkItem</h2><p>有的时候 ， 对于同一个操作我们有可能会放在不同的线程中去执行 ， 这样我们就可以把这个操作用DispatchWorkItem的形式包裹起来 ， 在不同的线程中执行 。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> group = <span class="type">DispatchGroup</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>, attributes: <span class="type">DispatchQueue</span>.<span class="type">Attributes</span>.concurrent)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> item1 = <span class="type">DispatchWorkItem</span> &#123;</span><br><span class="line">    (<span class="number">1</span>...<span class="number">5</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍎 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> item2 = <span class="type">DispatchWorkItem</span> &#123;</span><br><span class="line">    (<span class="number">6</span>...<span class="number">10</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍇 \(Thread.current) + \(i)"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">q.async(execute: item1)</span><br><span class="line"></span><br><span class="line">q.async(execute: item2)</span><br><span class="line"></span><br><span class="line">(<span class="number">11</span>...<span class="number">15</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"🍌 \(Thread.current) + \(i)"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Group"><a href="#Group" class="headerlink" title="Group"></a>Group</h2><p>DispatchGroup 可以用来管理一组队列 ， 监听所有队列的所有任务都完成的通知 ，比较常用的就是在一个页面请求多个接口的时候 ，全部请求完再刷新UI 。</p>
+<p>pass</p>
+<h2 id="延时执行"><a href="#延时执行" class="headerlink" title="延时执行"></a>延时执行</h2><p>pass</p>
+<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>pass</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总之 ， 使用GCD一方面会提升我们应用的性能 ， 给用户带来更好的体验 ， 另一方面使用得当也能解决线程安全等问题 。</p>
 
-线程
-线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。
-
-队列
-队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入操作，在前端（称为front）进行删除操作。队列的操作方式和堆栈类似，唯一的区别在于队列只允许...
-        </p>
-        <p class="article-more-link">
-          <a href="/2018/06/10/gcd/#more">Read More</a>
-        </p>
       
     </div>
     <footer class="article-footer">
       
       
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GCD/">GCD</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/swift/">swift</a></li></ul>
+
       
 
     </footer>
@@ -335,18 +383,28 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p class="article-excerpt-content">
-          在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换
-12345+ (void)load&#123;    Method m = class_getInstanceMethod([self class], @selector(somemethod));    Method m0 = class_getInstanceMethod([self class], NSSelectorFromString(@"somemethod"));    met...
-        </p>
-        <p class="article-more-link">
-          <a href="/2018/06/10/load/#more">Read More</a>
-        </p>
+        <p>在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)load&#123;</span><br><span class="line">    Method m = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">@selector</span>(somemethod));</span><br><span class="line">    Method m0 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="built_in">NSSelectorFromString</span>(<span class="string">@"somemethod"</span>));</span><br><span class="line">    method_exchangeImplementations(m2, m1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么，这个load方法是如何执行的，是什么原理呢?</p>
+<p>通过阅读runtime的源代码，我们可以看到这个顺序</p>
+<ol>
+<li>load是在类被添加进runtime开始执行的</li>
+<li>每个load方法只会执行一次</li>
+<li>不会沿用父类的实现</li>
+<li>每个类的父类先执行，然后是子类，最后是category分类 (递归)</li>
+<li>没有[obj sendmsg]的那一套方法查找过程，直接获取函数指针执行</li>
+</ol>
+<p>先就这么多了，欢迎补充</p>
+
       
     </div>
     <footer class="article-footer">
       
       
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
       
 
     </footer>
@@ -382,28 +440,40 @@
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p class="article-excerpt-content">
-          一点关于Objective-C中合成存取器@property的总结在日常开发中，我们一般会使用
-1@property (nonatomic,strong) Obj *obj
-这样的表现形式来修饰当前对象的成员属性，大家都知道，相对于手工创建成员变量，@property等于变量加Getter&amp;Setter，那么先让我们看下日常的用法，一下为一些常用的关键字：
+        <h1 id="一点关于Objective-C中合成存取器-property的总结"><a href="#一点关于Objective-C中合成存取器-property的总结" class="headerlink" title="一点关于Objective-C中合成存取器@property的总结"></a>一点关于Objective-C中合成存取器@property的总结</h1><p>在日常开发中，我们一般会使用</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) Obj *obj</span><br></pre></td></tr></table></figure>
+<p>这样的表现形式来修饰当前对象的成员属性，大家都知道，相对于手工创建成员变量，@property等于变量加Getter&amp;Setter，那么先让我们看下日常的用法，一下为一些常用的关键字：</p>
+<hr>
+<ul>
+<li>atomic <strong>nonatomic</strong></li>
+<li>readonly</li>
+<li>assign</li>
+<li><strong>strong</strong></li>
+<li>weak</li>
+<li>copy</li>
+<li>unsafe_unretained</li>
+<li>retain</li>
+</ul>
+<hr>
+<p>下面分别简单介绍一下各个修饰符代表的意思</p>
+<h2 id="atomic-nonatomic"><a href="#atomic-nonatomic" class="headerlink" title="atomic/nonatomic"></a>atomic/nonatomic</h2><p>atoimc与nonatomic是对应的属性，其中，nonatomic表示非线程安全的，优点是内存开销小，相对而言的缺点是在多线程访问的过程中并不安全，但是atomic也不保证一定就会线程安全，为了保证属性访问的线程安全，我们需要对成员变量的读取加锁，这一节不对锁过多做介绍，日常中大部分的读取属性我们都是使用非线程安全的nonatomic。</p>
+<h2 id="readonly"><a href="#readonly" class="headerlink" title="readonly"></a>readonly</h2><p>我们一般将property叫做合成存取器，因为它帮我们自动生成了getter&amp;setter方法，readonly则表示在自动生成存取方法的时候，不生成getter方法，也就是说在类对抗外部不能直接对类实例的该属性进行赋值操作，当我们不显式设定readonly的时候，合成存取则默认为readwrite，即外部可读可写。</p>
+<h2 id="assign"><a href="#assign" class="headerlink" title="assign"></a>assign</h2><p>assign常用于简单数据类型，含义为当前属性仅仅用于赋值操作，并不会持有该属性，亦不会增加该属性的引用计数，若该属性为对象类型则如果该属性销毁时并不会通知当前类对象，所以指针仍然指向之前的内存地址，这是调用get该属性时会导致野指针。</p>
+<h2 id="strong"><a href="#strong" class="headerlink" title="strong"></a>strong</h2><p>strong从字面来理解就是【强】的意思，那么当property声明为strong时，表示该对象对该属性为强引用关系，会增加该成员属性的引用计数，所以该字段只能用于修饰对象类型而不能修饰基本类型。这样当自动释放池检查对象的饮用计数时，只要当前类对象未释放则该属性引用计数就不会为0。在该属性被赋值时会先增加新值的引用计数，再减少旧值的引用计数。</p>
+<h2 id="weak"><a href="#weak" class="headerlink" title="weak"></a>weak</h2><p>weak最常使用的场景时为标记该属性为代理，避免循环引用的时候，与strong恰恰相反，表示对该属性赋值时并不会增加其引用计数，也不会减少旧值的引用计数，属于‘虽然从当前对象能查看到这个对象，但是没啥关系’的那种。当该属性被销毁时property会自动置为nil，防止野指针。</p>
+<h2 id="copy"><a href="#copy" class="headerlink" title="copy"></a>copy</h2><p>copy常用语修饰block与字符串，由copy修饰的对象复制操作时会从内存空间拷贝一份，注意，不要用copy修饰可变类型如NSMutableArray等。</p>
+<h2 id="unsafe-unretained"><a href="#unsafe-unretained" class="headerlink" title="unsafe_unretained"></a>unsafe_unretained</h2><p>大部分同assign，不同在于unsafe_unretained仅可用来修饰基本数据类型</p>
+<h2 id="retain"><a href="#retain" class="headerlink" title="retain"></a>retain</h2><p>大部分同strong，由于再arc下辣鸡自动回收，所以不怎么使用该修饰。在MRC下基本等同与strong。</p>
 
-
-atomic nonatomic
-readonly
-assign
-strong
-weak
-copy
-unsafe_unre...
-        </p>
-        <p class="article-more-link">
-          <a href="/2018/06/04/property/#more">Read More</a>
-        </p>
       
     </div>
     <footer class="article-footer">
       
       
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
       
 
     </footer>
@@ -439,21 +509,44 @@ unsafe_unre...
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p class="article-excerpt-content">
-          键值监听KVO先上结论：
-当观察某对象 A 时，KVO 机制动态创建一个对象A当前类的子类，并为这个新的子类重写了被观察属性 keyPath 的 setter 方法。setter 方法随后负责通知观察对象属性的改变状况。
+        <h1 id="键值监听KVO"><a href="#键值监听KVO" class="headerlink" title="键值监听KVO"></a>键值监听KVO</h1><h2 id="先上结论："><a href="#先上结论：" class="headerlink" title="先上结论："></a>先上结论：</h2><blockquote>
+<p>当观察某对象 A 时，KVO 机制动态创建一个对象A当前类的子类，并为这个新的子类重写了被观察属性 keyPath 的 setter 方法。setter 方法随后负责通知观察对象属性的改变状况。</p>
+</blockquote>
+<h2 id="深入剖析："><a href="#深入剖析：" class="headerlink" title="深入剖析："></a>深入剖析：</h2><blockquote>
+<p>Apple 使用了 isa 混写（isa-swizzling）来实现 KVO 。当观察对象A时，KVO机制动态创建一个新的名为：NSKVONotifying_A 的新类，该类继承自对象A的本类，且 KVO 为 NSKVONotifying_A 重写观察属性的 setter 方法，setter 方法会负责在调用原 setter 方法之前和之后，通知所有观察对象属性值的更改情况。（备注： isa 混写（isa-swizzling）isa：is a kind of ； swizzling：混合，搅合；）</p>
+</blockquote>
+<h3 id="①NSKVONotifying-A-类剖析：在这个过程，被观察对象的-isa-指针从指向原来的-A-类，被-KVO-机制修改为指向系统新创建的子类-NSKVONotifying-A-类，来实现当前类属性值改变的监听"><a href="#①NSKVONotifying-A-类剖析：在这个过程，被观察对象的-isa-指针从指向原来的-A-类，被-KVO-机制修改为指向系统新创建的子类-NSKVONotifying-A-类，来实现当前类属性值改变的监听" class="headerlink" title="①NSKVONotifying_A 类剖析：在这个过程，被观察对象的 isa 指针从指向原来的 A 类，被 KVO 机制修改为指向系统新创建的子类 NSKVONotifying_A 类，来实现当前类属性值改变的监听"></a>①NSKVONotifying_A 类剖析：在这个过程，被观察对象的 isa 指针从指向原来的 A 类，被 KVO 机制修改为指向系统新创建的子类 NSKVONotifying_A 类，来实现当前类属性值改变的监听</h3><p>所以当我们从应用层面上看来，完全没有意识到有新的类出现，这是系统“隐瞒”了对 KVO 的底层实现过程，让我们误以为还是原来的类。但是此时如果我们创建一个新的名为“NSKVONotifying_A”的类，就会发现系统运行到注册 KVO 的那段代码时程序就崩溃，因为系统在注册监听的时候动态创建了名为 NSKVONotifying_A 的中间类，并指向这个中间类了。</p>
+<p>（isa 指针的作用：每个对象都有 isa 指针，指向该对象的类，它告诉 Runtime 系统这个对象的类是什么。所以对象注册为观察者时，isa 指针指向新子类，那么这个被观察的对象就神奇地变成新子类的对象（或实例）了。） 因而在该对象上对 setter 的调用就会调用已重写的 setter，从而激活键值通知机制。<br>—&gt;我猜，这也是 KVO 回调机制，为什么都俗称KVO技术为黑魔法的原因之一吧：内部神秘、外观简洁。</p>
+<h3 id="②子类setter方法剖析：KVO-的键值观察通知依赖于-NSObject-的两个方法-willChangeValueForKey-和-didChangevlueForKey"><a href="#②子类setter方法剖析：KVO-的键值观察通知依赖于-NSObject-的两个方法-willChangeValueForKey-和-didChangevlueForKey" class="headerlink" title="②子类setter方法剖析：KVO 的键值观察通知依赖于 NSObject 的两个方法:willChangeValueForKey:和 didChangevlueForKey:"></a>②子类setter方法剖析：KVO 的键值观察通知依赖于 NSObject 的两个方法:willChangeValueForKey:和 didChangevlueForKey:</h3><p>在存取数值的前后分别调用 2 个方法：<br>被观察属性发生改变之前，willChangeValueForKey:被调用，通知系统该 keyPath 的属性值即将变更；当改变发生后， didChangeValueForKey: 被调用，通知系统该 keyPath 的属性值已经变更；之后， observeValueForKey:ofObject:change:context: 也会被调用。且重写观察属性的 setter 方法这种继承方式的注入是在运行时而不是编译时实现的。</p>
+<h2 id="特点："><a href="#特点：" class="headerlink" title="特点："></a>特点：</h2><blockquote>
+<p>观察者观察的是属性，只有遵循 KVO 变更属性值的方式才会执行 KVO 的回调方法，例如是否执行了 setter 方法、或者是否使用了 KVC 赋值。<br>如果赋值没有通过 setter 方法或者 KVC，而是直接修改属性对应的成员变量，例如：仅调用 _name = @”newName”，这时是不会触发 KVO 机制，更加不会调用回调方法的。<br>所以使用 KVO 机制的前提是遵循 KVO 的属性设置方式来变更属性值。</p>
+</blockquote>
+<h3 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h3><p>首先 ， 打开Xcode创建一个commandlineTool的工程 ， 让我们创建一个Person类 ， 并为其实现observe方法</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span> , <span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#import <span class="meta-string">"Person.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Person</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)observeValueForKeyPath:(<span class="built_in">NSString</span> *)keyPath ofObject:(<span class="keyword">id</span>)object change:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSKeyValueChangeKey</span>,<span class="keyword">id</span>&gt; *)change context:(<span class="keyword">void</span> *)context &#123;</span><br><span class="line">    <span class="keyword">id</span> old = [change objectForKey:<span class="built_in">NSKeyValueChangeOldKey</span>];</span><br><span class="line">    <span class="keyword">id</span> new = [change objectForKey:<span class="built_in">NSKeyValueChangeNewKey</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"I am %@"</span>,<span class="keyword">self</span>.name);</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"I observe he change his name from %@ to %@"</span>,old,new);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>打开main.m</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"Person.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) &#123;</span><br><span class="line">    <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">        <span class="comment">// insert code here...</span></span><br><span class="line">        Person *alice = [Person new];</span><br><span class="line">        alice.name = <span class="string">@"alice"</span>;</span><br><span class="line">        Person *alex = [Person new];</span><br><span class="line">        alex.name = <span class="string">@"alex"</span>;</span><br><span class="line"></span><br><span class="line">        [alex addObserver:alice forKeyPath:<span class="string">@"name"</span> options:<span class="built_in">NSKeyValueObservingOptionNew</span>|<span class="built_in">NSKeyValueObservingOptionOld</span> context:<span class="literal">nil</span>];</span><br><span class="line">        alex.name = <span class="string">@"alex.喜马拉雅.铁山"</span>;</span><br><span class="line">        alex.name = <span class="string">@"西门吹牛"</span>;</span><br><span class="line">        alex.name = <span class="string">@"关谷"</span>;</span><br><span class="line"></span><br><span class="line">        [alex removeObserver:alice forKeyPath:<span class="string">@"name"</span>];</span><br><span class="line"></span><br><span class="line">        alex.name = <span class="string">@"欧阳"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解释一下上面的代码</p>
+<ul>
+<li>创建两个Person的实例 ， alice和alex</li>
+<li>将alice设置为alex的name属性的观察者</li>
+<li>选项为观察新值和旧值</li>
+<li>更改alex的name</li>
+<li>删除观察者</li>
+<li>再次更改alex的name</li>
+</ul>
+<p>我们按下command+R 运行一下可以看到以下输出</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Test[<span class="number">82281</span>:<span class="number">3097986</span>] I am alice</span><br><span class="line">Test[<span class="number">82281</span>:<span class="number">3097986</span>] I observe he change his name from alex to alex.喜马拉雅.铁山</span><br><span class="line">Test[<span class="number">82281</span>:<span class="number">3097986</span>] I am alice</span><br><span class="line">Test[<span class="number">82281</span>:<span class="number">3097986</span>] I observe he change his name from alex.喜马拉雅.铁山 to 西门吹牛</span><br><span class="line">Test[<span class="number">82281</span>:<span class="number">3097986</span>] I am alice</span><br><span class="line">Test[<span class="number">82281</span>:<span class="number">3097986</span>] I observe he change his name from 西门吹牛 to 关谷</span><br><span class="line">Program ended with exit code: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>可以到KVO的使用还是非常方便的 ， 不过要注意使用完之后要移除观察者哦 。 </p>
 
-深入剖析：
-Apple 使用了 isa 混写（isa-swizzling）来实现 KVO 。当观察对象A时，KVO机制动态创建一个新的名为：NSKVONotifying_A 的新类，该类继承自对象A的本类，且 KVO 为 NSKVONotifying_A 重写观察属性的...
-        </p>
-        <p class="article-more-link">
-          <a href="/2018/03/14/kvo/#more">Read More</a>
-        </p>
       
     </div>
     <footer class="article-footer">
       
       
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KVO/">KVO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
       
 
     </footer>
@@ -489,22 +582,37 @@ Apple 使用了 isa 混写（isa-swizzling）来实现 KVO 。当观察对象A�
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p class="article-excerpt-content">
-          先介绍下KVC（Key-value coding）键值编码，从名字大概可以推断出功能，也就是根据对象的属性名称这个‘key‘来设置和操作’value‘，好，那么让我们先上手试一下。
-打开Xcode，选择新建工程，选择macos，然后选择commandline。
-新建学生类
-12345@interface Student : NSObject@property (nonatomic, copy) NSString *name;@end
-找到main.m
-1234567891011121314...
-        </p>
-        <p class="article-more-link">
-          <a href="/2018/02/12/kvc/#more">Read More</a>
-        </p>
+        <p>先介绍下KVC（Key-value coding）键值编码，从名字大概可以推断出功能，也就是根据对象的属性名称这个‘key‘来设置和操作’value‘，好，那么让我们先上手试一下。</p>
+<p>打开Xcode，选择新建工程，选择macos，然后选择commandline。</p>
+<p>新建学生类</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Student</span> : <span class="title">NSObject</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span> *name;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>找到main.m</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"Student.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) &#123;</span><br><span class="line">    <span class="keyword">@autoreleasepool</span> &#123;</span><br><span class="line">        <span class="comment">// insert code here...</span></span><br><span class="line"></span><br><span class="line">        Student *s = [Student new];</span><br><span class="line"></span><br><span class="line">        [s setValue:<span class="string">@"zhangsan"</span> forKey:<span class="string">@"name"</span>];</span><br><span class="line"></span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, [s valueForKey:<span class="string">@"name"</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>神奇吧 ，我们仅仅是根据一个字符串 ，就完成了对student-&gt;name的赋值操作 ！<br>这是否让你联想到什么呢 ，仔细思考 。。。<br>没错 ，当我们从服务端拉取数据的时候 ， 往往是一串json，我们把它转化成为字典或数组等形式，但是我们不想在接下来的调用中没完没了的使用字典，所以我们要把它转化为model ！</p>
+<h1 id="作用介绍"><a href="#作用介绍" class="headerlink" title="作用介绍"></a>作用介绍</h1><ul>
+<li><p>动态地取值和设值</p>
+</li>
+<li><p>访问和修改私有变量</p>
+</li>
+<li><p>Model和字典转换</p>
+</li>
+</ul>
+<h2 id="动态存值"><a href="#动态存值" class="headerlink" title="动态存值"></a>动态存值</h2><p>由于我们不用显示的调用getset方法操作对象的属性 ， 所以我们可以很方便的通过key为字符串的形式对model进行赋值</p>
+<h2 id="访问和修改私有变量"><a href="#访问和修改私有变量" class="headerlink" title="访问和修改私有变量"></a>访问和修改私有变量</h2><p>有些三方库的私有属性我们需要做一些调整改变 ， 但是私有属性无法在外部直接访问 ， 这时我们就可以直接在外部进行key-value赋值</p>
+<h2 id="Model和字典转换"><a href="#Model和字典转换" class="headerlink" title="Model和字典转换"></a>Model和字典转换</h2><p>客户端经常要发起网络请求 ， 当服务端反给我们response的时候先解析成Dictionary ， 不过在代码中直接使用dictionary进行操作 ， 修改视图等操作既不安全 ， 写起来也很烦 。<br>除了使用第三方model-dic解析框架外也可以自己实现一个基于KVC的dictionary解析helper 。</p>
+<blockquote>
+<p>日常中使用的KVC就是以上几个方面的了 ， 欢迎补充 。</p>
+</blockquote>
+
       
     </div>
     <footer class="article-footer">
       
       
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KVC/">KVC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
       
 
     </footer>
@@ -540,19 +648,87 @@ Apple 使用了 isa 混写（isa-swizzling）来实现 KVO 。当观察对象A�
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p class="article-excerpt-content">
-          一点对MVVM微不足道的总结目前客户端最流行的架构应该就是MVVM ， 然而看了一大堆博客之后 ， 大部分是大谈特谈而并没有仔细讲解具体的可行之法 ， 这篇博客将会说说我在实际工作中的使用 。
-基本概念MVC
-MVC模式（Model–view–controller）是软件工程中的一种软件架构模式，把软件系统分为三个基本部分：模型（Model）、视图（View）和控制器（Controller）。MVC模式最早由Trygve Reenskaug在1978年提出[1]，是施乐帕罗奥多研究中心（X...
-        </p>
-        <p class="article-more-link">
-          <a href="/2018/01/22/mvvm/#more">Read More</a>
-        </p>
+        <h1 id="一点对MVVM微不足道的总结"><a href="#一点对MVVM微不足道的总结" class="headerlink" title="一点对MVVM微不足道的总结"></a>一点对MVVM微不足道的总结</h1><p>目前客户端最流行的架构应该就是MVVM ， 然而看了一大堆博客之后 ， 大部分是大谈特谈而并没有仔细讲解具体的可行之法 ， 这篇博客将会说说我在实际工作中的使用 。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h3><blockquote>
+<p>MVC模式（Model–view–controller）是软件工程中的一种软件架构模式，把软件系统分为三个基本部分：模型（Model）、视图（View）和控制器（Controller）。MVC模式最早由Trygve Reenskaug在1978年提出[1]，是施乐帕罗奥多研究中心（Xerox PARC）在20世纪80年代为程序语言Smalltalk发明的一种软件架构。MVC模式的目的是实现一种动态的程序设计，使后续对程序的修改和扩展简化，并且使程序某一部分的重复利用成为可能。除此之外，此模式通过对复杂度的简化，使程序结构更加直观。软件系统通过对自身基本部分分离的同时也赋予了各个基本部分应有的功能。专业人员可以通过自身的专长分组：</p>
+</blockquote>
+<ul>
+<li>控制器（Controller）- 负责转发请求，对请求进行处理。</li>
+<li>视图（View） - 界面设计人员进行图形界面设计。</li>
+<li>模型（Model） - 程序员编写程序应有的功能（实现算法等等）、数据库专家进行数据管理和数据库设计(可以实现具体的功能)。</li>
+</ul>
+<h3 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h3><blockquote>
+<p>MVVM是Model-View-ViewModel的简写，最早是由微软公司提出并运用，是MVP（Model-View-Presenter）模式与WPF结合的应用方式时发展演变过来的一种新型架构架构。</p>
+</blockquote>
+<blockquote>
+<p>MVVM有助于将图形用户界面的开发与业务逻辑或后端逻辑（数据模型）的开发分离开来，这是通过置标语言或GUI代码实现的。MVVM的视图模型是一个值转换器， 这意味着视图模型负责从模型中暴露（转换）数据对象，以便轻松管理和呈现对象。在这方面，视图模型比视图做得更多，并且处理大部分视图的显示逻辑。 视图模型可以实现中介者模式，组织对视图所支持的用例集的后端逻辑的访问。</p>
+</blockquote>
+<ul>
+<li>模型 模型是指代表真实状态内容的领域模型（面向对象），或指代表内容的数据访问层（以数据为中心）。</li>
+<li>视图 就像在MVC和MVP模式中一样，视图是用户在屏幕上看到的结构、布局和外观（UI）。</li>
+<li>视图模型 视图模型是暴露公共属性和命令的视图的抽象。MVVM没有MVC模式的控制器，也没有MVP模式的presenter，有的是一个绑定器。在视图模型中，绑定器在视图和数据绑定器之间进行通信。</li>
+<li>绑定器 声明性数据和命令绑定隐含在MVVM模式中。在Microsoft解决方案堆中，绑定器是一种名为XAML的标记语言。绑定器使开发人员免于被迫编写样板式逻辑来同步视图模型和视图。在微软的堆之外实现时，声明性数据绑定技术的出现是实现该模式的一个关键因素。</li>
+</ul>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><h3 id="解决controller过于臃肿"><a href="#解决controller过于臃肿" class="headerlink" title="解决controller过于臃肿"></a>解决controller过于臃肿</h3><p>在MVC中很容易就会把一些业务逻辑 ， 网络请求 ， 数据IO都放在controller中  </p>
+<p>注意 ， 这里不是说MVC的控制器一定很臃肿 ， 而是「容易变得臃肿」 </p>
+<p>在我们新建一个工程的时候 ， 苹果会自动帮我们生成一个ViewController ， 而在动手开始写代码的时候 ， 往往控制不住就直接将逻辑写在Controller中 。</p>
+<p>MVVM架构会要求我们把任何与非View的逻辑玻璃出来 ， Controller中除了绑定viewModel之外的代码只允许出现对View的操作 。 因为Controller对我们来说也只是一个View 。</p>
+<h3 id="逻辑分离"><a href="#逻辑分离" class="headerlink" title="逻辑分离"></a>逻辑分离</h3><p>就像上面说的 ， 业务逻辑都会抽离出来放在viewModel中 ，这样可以在任何地方重用这一堆业务 </p>
+<p>除此之外 ， 我们的代码将会更加易于测试 ， 避免出现在MVC中可能出现的那种超长的方法、严重依赖全局状态导致难以测试的问题 。</p>
+<h3 id="view重用-可拥有view单独的viewModel"><a href="#view重用-可拥有view单独的viewModel" class="headerlink" title="view重用 (可拥有view单独的viewModel)"></a>view重用 (可拥有view单独的viewModel)</h3><p>在MVVM中 ， View只需要与ViewMode交互 ， 不会收到其他的影响 ， 所以不但vm、m 可以重用 ， view一样可以重复使用 ， 修改的时候也更加方便 。</p>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><h3 id="BUG与传递"><a href="#BUG与传递" class="headerlink" title="BUG与传递"></a>BUG与传递</h3><p>由于在MVVM里面View和ViewModel是松耦合的 ， 在测试出问题的时候就要排查各个地方的问题 ， </p>
+<p>有可能是vm中的也有可能是view中的 。 由于vm会传递数据 ， 一个bug会很容易的传递到其他地方， 引发更大的问题。</p>
+<p>并且其中一个地方出现问题的话 ， 这个BUG就极有可能随着传递到其他的逻辑中 ， 从而导致更严重的问题发生 。</p>
+<h3 id="需要维护Model-，-viewModel-，-和view的开销-，-内存花费大"><a href="#需要维护Model-，-viewModel-，-和view的开销-，-内存花费大" class="headerlink" title="需要维护Model ， viewModel ， 和view的开销 ， 内存花费大"></a>需要维护Model ， viewModel ， 和view的开销 ， 内存花费大</h3><p>额外的viewModel使用也并不是无代价的 ， 有可能由于各种原因导致内存占用增多 ， </p>
+<p>而额外的 ， 如果因为强饮用或其他原因导致的循环引用等内存不能正确释放的情况下 ， 有可能会内存疯涨 。</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><p>上面说了这些只是一个大致的介绍 ， 我们还是来看看应该怎样使用吧 。</p>
+<p>你可以使用delegate的方式或者block的方式对view和viewModel进行桥接 ， 在这里我们选择使用delegate ， 我认为这样看着比较直观 ， 在代码中也更加明确。</p>
+<p>首先创建一个工程 ， 选择singleViewApplication ， 我们就以最常见的的登陆功能作为示例</p>
+<h3 id="新建用于由viewModel调用-，-view进行响应的protocol"><a href="#新建用于由viewModel调用-，-view进行响应的protocol" class="headerlink" title="新建用于由viewModel调用 ， view进行响应的protocol"></a>新建用于由viewModel调用 ， view进行响应的protocol</h3><p>首先要起个名字 ， 就叫LoginViewModelDelegateProtocol 吧</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">LoginViewModelDelegateProtocol</span> &lt;<span class="title">NSObject</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>好 ， 让我们想一想view会发送一些什么数据给VM ，VM都需要什么数据 。</p>
+<p>对于简单登陆的VM来说 ， 我们需要通知view的数据和方法</p>
+<ul>
+<li>登陆成功</li>
+<li>错误提示</li>
+<li>按钮状态改变（是否可以点击）</li>
+</ul>
+<p>那么我们可以在protocol中添加方法了 </p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">LoginViewModelDelegateProtocol</span> &lt;<span class="title">NSObject</span>&gt;</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)loginSuccess;</span><br><span class="line">- (<span class="keyword">void</span>)showTips:(<span class="built_in">NSString</span> *)tip;</span><br><span class="line">- (<span class="keyword">void</span>)buttonEnable:(<span class="built_in">BOOL</span> )enable;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<h3 id="新建用于由view调用-，-viewModel进行响应的protocol"><a href="#新建用于由view调用-，-viewModel进行响应的protocol" class="headerlink" title="新建用于由view调用 ， viewModel进行响应的protocol"></a>新建用于由view调用 ， viewModel进行响应的protocol</h3><p>同理 ， 我们只要确认vm和v需要交换的数据就好了 。</p>
+<ul>
+<li>用户名输入框的字符串</li>
+<li>密码输入框的字符串</li>
+<li>点击登陆事件</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">LoginViewModelInterfaceProtocol</span> &lt;<span class="title">NSObject</span>&gt;</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)inputUserName:(<span class="built_in">NSString</span> *)uname;</span><br><span class="line">- (<span class="keyword">void</span>)inputPwd:(<span class="built_in">NSString</span> *)pwd;</span><br><span class="line">- (<span class="keyword">void</span>)didTapLoginBUtton;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<h3 id="实现代理方法"><a href="#实现代理方法" class="headerlink" title="实现代理方法"></a>实现代理方法</h3><p>下面我们新建一个viewModel叫做LoginViewModel</p>
+<p>LoginViewModel.h</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"LoginViewModelDelegateProtocol.h"</span></span></span><br><span class="line"><span class="meta">#import <span class="meta-string">"LoginViewModelInterfaceProtocol.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">LoginViewModel</span> : <span class="title">NSObject</span>&lt;<span class="title">LoginViewModelInterfaceProtocol</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span> ,<span class="keyword">weak</span>) <span class="keyword">id</span>&lt;LoginViewModelDelegateProtocol&gt; delegate;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>LoginViewModel.m</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">"LoginViewModelDelegateProtocol.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">LoginViewModel</span> ()</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">BOOL</span> unameValid;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">assign</span>, <span class="keyword">nonatomic</span>) <span class="built_in">BOOL</span> pwdValid;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">LoginViewModel</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)inputUserName:(<span class="built_in">NSString</span> *)uname &#123;</span><br><span class="line">    <span class="keyword">self</span>.unameValid = uname.length&gt;<span class="number">0</span>;</span><br><span class="line">    [<span class="keyword">self</span> judgeAllValid];</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)inputPwd:(<span class="built_in">NSString</span> *)pwd &#123;</span><br><span class="line">    <span class="keyword">self</span>.pwdValid = pwd.length&gt;<span class="number">0</span>;</span><br><span class="line">    [<span class="keyword">self</span> judgeAllValid];</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)didTapLoginBUtton &#123;</span><br><span class="line">    <span class="comment">// 一些请求 ， 这里忽略网络请求 ， 直接模拟结果</span></span><br><span class="line">    [<span class="keyword">self</span>.delegate loginSuccess];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)judgeAllValid &#123;</span><br><span class="line">    <span class="built_in">BOOL</span> v = [<span class="keyword">self</span> isAllValid];</span><br><span class="line">    [<span class="keyword">self</span>.delegate buttonEnable:v];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="built_in">BOOL</span>)isAllValid &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>.unameValid &amp;&amp; <span class="keyword">self</span>.pwdValid;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>然后在controller初始化 ， 并且实现全部的方法就可以了 。</p>
+<p>viewController.m</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="meta-string">"viewController.h"</span></span></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">viewController</span> () &lt;<span class="title">LoginViewModelDelegateProtocol</span>&gt;</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span> ,<span class="keyword">strong</span>) LoginViewModel *vm;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">TDFSetPhoneNumController</span></span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</span><br><span class="line">    </span><br><span class="line">    [<span class="keyword">super</span> viewDidLoad];</span><br><span class="line">    <span class="keyword">self</span>.vm.delegate = <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#pragma mark - VMDelegate</span></span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)loginSuccess &#123;</span><br><span class="line">    [<span class="keyword">self</span>.navigationController pushViewController:[SuccessVC new]] animated:<span class="literal">true</span>];</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)showTips:(<span class="built_in">NSString</span> *)tip &#123;</span><br><span class="line">    [<span class="keyword">self</span> showAlert:tip];</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)buttonEnable:(<span class="built_in">BOOL</span> )enable &#123;</span><br><span class="line">    <span class="keyword">self</span>.loginbutton.enable = enable;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#pragma mark - Getter</span></span><br><span class="line"></span><br><span class="line">- (LoginViewModel *)vm &#123;</span><br><span class="line">    <span class="keyword">if</span> (!_vm) &#123;</span><br><span class="line">        _vm = [LoginViewModel new];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> _vm;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<h3 id="大功告成"><a href="#大功告成" class="headerlink" title="大功告成"></a>大功告成</h3><p>这里全部的代码是我手写的 ， 后面省略了一些UIKit相关的布局 ， 想必以你的聪明才智应该已经能很轻松的将剩余的补全了吧 。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>这里有几点我认为应该注意的</p>
+<ul>
+<li>vm与v之间不论通过什么传递值和响应 ， 都要保持数据的单向流动 。</li>
+<li>代理用weak ， 内存回收时会自动置为nil ， </li>
+<li>全部model与viewModel中不应包含任何UIKit框架下的类</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总而言之 ， 我认为MVVM在我们的代码整体分工和应用架构的过程中应用还是十分优雅和安全的 ， </p>
+<p>不过话说回来什么架构也罢 ， 还是要看我们怎么去用它 ， 不是吗</p>
+
       
     </div>
     <footer class="article-footer">
       
       
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVVM/">MVVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
+
       
 
     </footer>
@@ -617,8 +793,6 @@ MVC模式（Model–view–controller）是软件工程中的一种软件架构�
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/categories" class="mobile-nav-link">Categories</a>
   
     <a href="/tags" class="mobile-nav-link">Tags</a>
   

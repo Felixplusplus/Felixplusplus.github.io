@@ -6,17 +6,20 @@
   <title>浅谈gcd | 匀昊的旧笔记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
+  <meta name="keywords" content="swiftGCD" />
+  
   
   
   
   <meta name="description" content="基本概念进程 进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体  线程 线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。  队列 队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入">
+<meta name="keywords" content="swift,GCD">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈GCD">
 <meta property="og:url" content="https://felixplusplus.github.io/2018/06/10/gcd/index.html">
 <meta property="og:site_name" content="匀昊的旧笔记">
 <meta property="og:description" content="基本概念进程 进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体  线程 线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。  队列 队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-13T05:13:33.546Z">
+<meta property="og:updated_time" content="2018-08-18T10:50:18.020Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈GCD">
 <meta name="twitter:description" content="基本概念进程 进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体  线程 线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。  队列 队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入">
@@ -91,7 +94,7 @@
               <a class="brand" style="
                  margin-top: 0px;"  
                 href="#" data-toggle="modal" data-target="#myModal" >
-                  <img width="124px" height="124px" alt="Hike News" src="/css/images/mylogo.jpg">
+                  <img width="88px" height="88px" alt="Hike News" src="/css/images/mylogo.jpg">
               </a>
             
             
@@ -101,8 +104,6 @@
                   <li> <a class="main-nav-link" href="/">Home</a> </li>
                 
                   <li> <a class="main-nav-link" href="/archives">Archives</a> </li>
-                
-                  <li> <a class="main-nav-link" href="/categories">Categories</a> </li>
                 
                   <li> <a class="main-nav-link" href="/tags">Tags</a> </li>
                 
@@ -293,6 +294,10 @@ var a = new Donate({
 
       
       
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GCD/">GCD</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/swift/">swift</a></li></ul>
+
+      
 
     </footer>
   </div>
@@ -375,8 +380,6 @@ var a = new Donate({
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/categories" class="mobile-nav-link">Categories</a>
   
     <a href="/tags" class="mobile-nav-link">Tags</a>
   
