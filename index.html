@@ -255,50 +255,6 @@
         
           <section id="main" style="float:none;">
   
-    <article id="post-lldb"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2018/08/27/lldb/">大话lldb</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2018/08/27/lldb/" class="article-date">
-	  <time datetime="2018-08-27T07:06:47.000Z" itemprop="datePublished">2018-08-27</time>
-	</a>
-
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="lldb-简介"><a href="#lldb-简介" class="headerlink" title="lldb 简介"></a>lldb 简介</h1><h2 id="lldb-是什么"><a href="#lldb-是什么" class="headerlink" title="lldb 是什么"></a>lldb 是什么</h2><p>lldb 是我们日常开发用来调试的命令行工具</p>
-<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h1><h1 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h1><h2 id="Chisel"><a href="#Chisel" class="headerlink" title="Chisel"></a>Chisel</h2><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1>
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-        
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
     <article id="post-swiftBlockChain"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
     
@@ -761,74 +717,6 @@
 <!-- Table of Contents -->
 
   
-    <article id="post-aop"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2018/07/24/aop/">AOP</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2018/07/24/aop/" class="article-date">
-	  <time datetime="2018-07-24T06:32:12.000Z" itemprop="datePublished">2018-07-24</time>
-	</a>
-
-      
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Aspect-Oriented-Programming"><a href="#Aspect-Oriented-Programming" class="headerlink" title="Aspect Oriented Programming"></a>Aspect Oriented Programming</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>AOP 直译为 （面向切面编程）</p>
-<p>以下引用自wikipedia</p>
-<blockquote>
-<p>面向侧面的程序设计（aspect-oriented programming，AOP，又译作面向方面的程序设计、观点导向编程、剖面导向程序设计）是计算机科学中的一个术语，指一种程序设计范型。该范型以一种称为侧面（aspect，又译作方面）的语言构造为基础，侧面是一种新的模块化机制，用来描述分散在对象、类或函数中的横切关注点（crosscutting concern）。侧面的概念源于对面向对象的程序设计的改进，但并不只限于此，它还可以用来改进传统的函数。与侧面相关的编程概念还包括元对象协议、主题（subject）、混入（mixin）和委托。</p>
-</blockquote>
-<h3 id="面向对象-OOP"><a href="#面向对象-OOP" class="headerlink" title="面向对象(OOP)"></a>面向对象(OOP)</h3><p>我们都知道面向对象的三大特点是：</p>
-<ul>
-<li>继承</li>
-<li>封装</li>
-<li>多态</li>
-</ul>
-<p>其中 ， 分装的要求是将功能分散到不同的类中 ， 执行职责划分 ， 这样就降低了代码的复杂度 ， 同时也让类和对象更易读易懂 。<br>但是有的时候几个不同的类可能会需要执行相同的方法 ， 比如在页面跳转的时候进行埋点记录 、 将当前页面的标识发送给服务端记录 。<br>这里你可能会想 ，写个类把这块代码封装一下 ， 再在需要的地方调用不就可以了 。<br>想一下 ， 当我们这个方法调用的api需要改写的时候会怎么样呢 ， 所有之前的调用处都需要改写 。<br>AOP就是为了这种情况而生的 ， 有了它我们可以把需要执行的代码切入到特定的类的指定位置（方法）中 。</p>
-<blockquote>
-<p>一般我们把这段需要执行的代码叫做切面 , 这组代码中的一份叫做切片 , 切入的位置叫做切入点 。</p>
-</blockquote>
-<p>这样看来 ， 有了AOP ， 我们的OOP就更加立体了 ， 我们可以在不修改源代码的前提下实现统一的某种需要执行的操作 。</p>
-<h2 id="iOS中的应用"><a href="#iOS中的应用" class="headerlink" title="iOS中的应用"></a>iOS中的应用</h2><p>对于我们iOS程序员来说 ， 我们在App中应用AOP最好的方式是通过runtime的methodswizzing ， runtime是一个比较难用的库 ， 因为比较底层 ，这里介绍一下Aspects这个库 ， 可以让我们方便的进行方法交换</p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>这里我们使用cocoapod管理三方库</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod <span class="string">"Aspects"</span></span><br></pre></td></tr></table></figure>
-<h3 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h3><p>首先创建一个工程 ， 安装Aspects ， 然后在appdelegate中的代理方法中添加如下代码：</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="built_in">UIViewController</span> aspect_hookSelector:<span class="keyword">@selector</span>(viewWillAppear:) withOptions:AspectPositionAfter usingBlock:^(<span class="keyword">id</span>&lt;AspectInfo&gt; aspectInfo, <span class="built_in">BOOL</span> animated) &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"View Controller %@ will appear animated: %tu"</span>, aspectInfo.instance, animated);</span><br><span class="line">&#125; error:<span class="literal">NULL</span>];</span><br></pre></td></tr></table></figure>
-<p>这样 ，我们就hook了UIViewController的viewWillAppear方法 ， 可以在这里插入切片了</p>
-<h2 id="源代码解读"><a href="#源代码解读" class="headerlink" title="源代码解读"></a>源代码解读</h2><p>pass</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-      
-      
-        
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AOP/">AOP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
-
-      
-
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-  
     <article id="post-unitTest"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="article-inner">
     
@@ -1147,6 +1035,169 @@
       
         
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-gcd"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/06/10/gcd/">浅谈GCD</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/06/10/gcd/" class="article-date">
+	  <time datetime="2018-06-10T08:46:48.000Z" itemprop="datePublished">2018-06-10</time>
+	</a>
+
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><blockquote>
+<p>进程指在系统中能独立运行并作为资源分配的基本单位，它是由一组机器指令、数据和堆栈等组成的，是一个能独立运行的活动实体</p>
+</blockquote>
+<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><blockquote>
+<p>线程是进程的基本执行单元，一个进程（程序）的所有任务都在线程中执行。</p>
+</blockquote>
+<h2 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h2><blockquote>
+<p>队列，又称为伫列（queue），是先进先出（FIFO, First-In-First-Out）的线性表。在具体应用中通常用链表或者数组来实现。队列只允许在后端（称为rear）进行插入操作，在前端（称为front）进行删除操作。队列的操作方式和堆栈类似，唯一的区别在于队列只允许新数据在后端进行添加。</p>
+</blockquote>
+<h2 id="同步-异步"><a href="#同步-异步" class="headerlink" title="同步/异步"></a>同步/异步</h2><p>可以这么理解：（知乎）</p>
+<ul>
+<li>假如你要做两件事 ， 烧水 、 刷牙</li>
+<li>同步 ：你烧水 ， 等水烧开了你再去刷牙</li>
+<li>异步 ：你烧水 ，不等水烧开就去刷牙了 ， 水烧开了会发出声音告诉你（callback） ， 然后你再处理水烧开之后的事情</li>
+</ul>
+<blockquote>
+<p>只要你是个正常人 ， 都会选择第二种 , 当然也有特殊情况 ， 那个人喜欢用热水刷牙</p>
+</blockquote>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><blockquote>
+<p>指两个或多个事件在同一时间间隔内发生。可以在某条线程和其他线程之间反复多次进行上下文切换，看上去就好像一个CPU能够并且执行多个线程一样。其实是伪异步。</p>
+</blockquote>
+<h2 id="线程队列中并行-串行"><a href="#线程队列中并行-串行" class="headerlink" title="线程队列中并行/串行"></a>线程队列中并行/串行</h2><blockquote>
+<p>串行队列：串行队列的特点是队列内的线程是一个一个执行，直到结束。并行队列：并行队列的特点是队列中所有线程的执行结束时必须是一块的，队列中其他线程执行完毕后，会阻塞当前线程等待队列中其他线程执行，然后一块执行完毕。</p>
+</blockquote>
+<h1 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h1><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">DispatchQueue</span>.global().async &#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"do something in global <span class="subst">\(Thread.current)</span>"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="type">DispatchQueue</span>.main.async &#123;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"do something in main <span class="subst">\(Thread.current)</span>"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里使用了全局的队列执行一些任务 ， 然后切回主队列 , 这里要注意主队列是运行在主线程上的任务堆栈 。</p>
+<h2 id="自定义队列"><a href="#自定义队列" class="headerlink" title="自定义队列"></a>自定义队列</h2><p>除了使用全局队列外我们还可以使用自定义的队列</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>)</span><br></pre></td></tr></table></figure>
+<p>初始化一个队列最简单的方式就是声明它的标签 。</p>
+<h2 id="async"><a href="#async" class="headerlink" title="async"></a>async</h2><p> 现在 ，你可以打开Xcode ， 新建一个commandLineTool工程和我一起练习 。</p>
+<p>打开main.swift</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>)</span><br><span class="line"></span><br><span class="line">q.sync &#123;</span><br><span class="line">    (<span class="number">1</span>...<span class="number">5</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍎 <span class="subst">\(Thread.current)</span> + <span class="subst">\(i)</span>"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">q.async &#123;</span><br><span class="line">    (<span class="number">6</span>...<span class="number">10</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍇 <span class="subst">\(Thread.current)</span> + <span class="subst">\(i)</span>"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">(<span class="number">11</span>...<span class="number">15</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"🍌 <span class="subst">\(Thread.current)</span> + <span class="subst">\(i)</span>"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>上面我们先是声明一个队列 , 使用sync添加一个同步的任务输出1到5 ， 使用async异步输出6到10 ， 同时在主线程打印11到15 。</p>
+<p>按下command+R运行project ，我们可以看到一下输出</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">1</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">2</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">3</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">4</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">5</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">11</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">6</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">12</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">7</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">13</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">8</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">14</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">9</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x103103480</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">15</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x103007940</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">10</span></span><br><span class="line"><span class="type">Program</span> ended with exit code: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>我们可以看到 ， 🍎代表的任务全部是优先执行的 ， 这说明sync添加的任务会阻塞当前线程 ， 在看到🍌和🍇是均匀分部的 。 这是由于async添加的任务会默认加入由系统管理的线程池 ， 异步执行 。</p>
+<h2 id="优先级-QoS"><a href="#优先级-QoS" class="headerlink" title="优先级 QoS"></a>优先级 QoS</h2><p>当多个队列同时执行的时候 ， 系统需要知道哪个队列优先级更高 ， 才能优先安排计算资源给他 ， 我们可以这样定义优先级：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>, qos: <span class="type">DispatchQoS</span>.background)</span><br></pre></td></tr></table></figure>
+<p>初始化的时候加上qos参数 ， qos（quality of service）从字面上理解就是「服务质量」，在swift中是这样定义的：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">QoSClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> background</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> utility</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> `<span class="keyword">default</span>`</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> userInitiated</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">case</span> userInteractive</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> unspecified</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">init</span>?(rawValue: qos_class_t)</span><br><span class="line"></span><br><span class="line">        <span class="meta">@available</span>(<span class="type">OSX</span> <span class="number">10.10</span>, iOS <span class="number">8.0</span>, *)</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">var</span> rawValue: qos_class_t &#123; <span class="keyword">get</span> &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>User Interactive： 和用户交互相关，比如动画等等优先级最高。比如用户连续拖拽的计算</li>
+<li>User Initiated： 需要立刻的结果，比如push一个ViewController之前的数据计算</li>
+<li>Utility： 可以执行很长时间，再通知用户结果。比如下载一个文件，给用户下载进度。</li>
+<li>Background： 用户不可见，比如在后台存储大量数据</li>
+</ul>
+<p>在选择时你要先思考一下几个问题 。<br>    这个任务是用户可见的吗？<br>    这个任务和用户交互有关吗？<br>    这个任务的执行时间有多少？<br>    这个任务的最终结果和UI有关系吗？</p>
+<h2 id="并发队列"><a href="#并发队列" class="headerlink" title="并发队列"></a>并发队列</h2><p>默认情况下添加进Queue的任务会串行执行 ， 先执行完一个再执行下一个：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>)</span><br><span class="line"></span><br><span class="line">q.async &#123;</span><br><span class="line">    (<span class="number">1</span>...<span class="number">5</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍎 <span class="subst">\(Thread.current)</span> + <span class="subst">\(i)</span>"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">q.async &#123;</span><br><span class="line">    (<span class="number">6</span>...<span class="number">10</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍇 <span class="subst">\(Thread.current)</span> + <span class="subst">\(i)</span>"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line">(<span class="number">11</span>...<span class="number">15</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"🍌 <span class="subst">\(Thread.current)</span> + <span class="subst">\(i)</span>"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>运行看下日志输出</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">1</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">11</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">2</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">12</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">3</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">13</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">4</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">14</span></span><br><span class="line">🍎 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">5</span></span><br><span class="line">🍌 &lt;<span class="type">NSThread</span>: <span class="number">0x100f046f0</span>&gt;&#123;number = <span class="number">1</span>, name = main&#125; + <span class="number">15</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">6</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">7</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">8</span></span><br><span class="line">🍇 &lt;<span class="type">NSThread</span>: <span class="number">0x102a081a0</span>&gt;&#123;number = <span class="number">2</span>, name = (null)&#125; + <span class="number">9</span></span><br><span class="line"><span class="type">Program</span> ended with exit code: <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<p>我们可以看到直到🍎都输出完毕才会输出🍇 ， 有时候我们想把任务并行执行 ， 怎么办呢 。<br>这里我们可以设置queue的Attributes 。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>, attributes: <span class="type">DispatchQueue</span>.<span class="type">Attributes</span>.concurrent)</span><br></pre></td></tr></table></figure>
+<p>再运行下 。 看看会怎样输出吧 .</p>
+<h2 id="DispatchWorkItem"><a href="#DispatchWorkItem" class="headerlink" title="DispatchWorkItem"></a>DispatchWorkItem</h2><p>有的时候 ， 对于同一个操作我们有可能会放在不同的线程中去执行 ， 这样我们就可以把这个操作用DispatchWorkItem的形式包裹起来 ， 在不同的线程中执行 。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Foundation</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> group = <span class="type">DispatchGroup</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> q = <span class="type">DispatchQueue</span>(label: <span class="string">"com.felix.felix"</span>, attributes: <span class="type">DispatchQueue</span>.<span class="type">Attributes</span>.concurrent)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> item1 = <span class="type">DispatchWorkItem</span> &#123;</span><br><span class="line">    (<span class="number">1</span>...<span class="number">5</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍎 <span class="subst">\(Thread.current)</span> + <span class="subst">\(i)</span>"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> item2 = <span class="type">DispatchWorkItem</span> &#123;</span><br><span class="line">    (<span class="number">6</span>...<span class="number">10</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"🍇 <span class="subst">\(Thread.current)</span> + <span class="subst">\(i)</span>"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">q.async(execute: item1)</span><br><span class="line"></span><br><span class="line">q.async(execute: item2)</span><br><span class="line"></span><br><span class="line">(<span class="number">11</span>...<span class="number">15</span>).forEach(&#123; i <span class="keyword">in</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"🍌 <span class="subst">\(Thread.current)</span> + <span class="subst">\(i)</span>"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Group"><a href="#Group" class="headerlink" title="Group"></a>Group</h2><p>DispatchGroup 可以用来管理一组队列 ， 监听所有队列的所有任务都完成的通知 ，比较常用的就是在一个页面请求多个接口的时候 ，全部请求完再刷新UI 。</p>
+<p>pass</p>
+<h2 id="延时执行"><a href="#延时执行" class="headerlink" title="延时执行"></a>延时执行</h2><p>pass</p>
+<h2 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h2><p>pass</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总之 ， 使用GCD一方面会提升我们应用的性能 ， 给用户带来更好的体验 ， 另一方面使用得当也能解决线程安全等问题 。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GCD/">GCD</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/swift/">swift</a></li></ul>
+
+      
+
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+  
+    <article id="post-load"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/06/10/load/">浅谈ObjC中load方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/06/10/load/" class="article-date">
+	  <time datetime="2018-06-10T03:27:09.000Z" itemprop="datePublished">2018-06-10</time>
+	</a>
+
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在使用runtime进行 method swizz 的时候，我们一般是在load方法中进行方法交换</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>)load&#123;</span><br><span class="line">    Method m = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="keyword">@selector</span>(somemethod));</span><br><span class="line">    Method m0 = class_getInstanceMethod([<span class="keyword">self</span> <span class="keyword">class</span>], <span class="built_in">NSSelectorFromString</span>(<span class="string">@"somemethod"</span>));</span><br><span class="line">    method_exchangeImplementations(m2, m1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么，这个load方法是如何执行的，是什么原理呢?</p>
+<p>通过阅读runtime的源代码，我们可以看到这个顺序</p>
+<ol>
+<li>load是在类被添加进runtime开始执行的</li>
+<li>每个load方法只会执行一次</li>
+<li>不会沿用父类的实现</li>
+<li>每个类的父类先执行，然后是子类，最后是category分类 (递归)</li>
+<li>没有[obj sendmsg]的那一套方法查找过程，直接获取函数指针执行</li>
+</ol>
+<p>先就这么多了，欢迎补充</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+      
+      
+        
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Objective-C/">Objective-C</a></li></ul>
 
       
 

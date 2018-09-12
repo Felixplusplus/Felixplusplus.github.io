@@ -19,7 +19,7 @@
 <meta property="og:site_name" content="匀昊的旧笔记">
 <meta property="og:description" content="先介绍下KVC（Key-value coding）键值编码，从名字大概可以推断出功能，也就是根据对象的属性名称这个‘key‘来设置和操作’value‘，好，那么让我们先上手试一下。 打开Xcode，选择新建工程，选择macos，然后选择commandline。 新建学生类 12345@interface Student : NSObject@property (nonatomic, copy) N">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-18T10:50:28.900Z">
+<meta property="og:updated_time" content="2018-08-31T02:01:50.271Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="我所了解的KVC">
 <meta name="twitter:description" content="先介绍下KVC（Key-value coding）键值编码，从名字大概可以推断出功能，也就是根据对象的属性名称这个‘key‘来设置和操作’value‘，好，那么让我们先上手试一下。 打开Xcode，选择新建工程，选择macos，然后选择commandline。 新建学生类 12345@interface Student : NSObject@property (nonatomic, copy) N">
@@ -207,7 +207,8 @@
 </li>
 </ul>
 <h2 id="动态存值"><a href="#动态存值" class="headerlink" title="动态存值"></a>动态存值</h2><p>由于我们不用显示的调用getset方法操作对象的属性 ， 所以我们可以很方便的通过key为字符串的形式对model进行赋值</p>
-<h2 id="访问和修改私有变量"><a href="#访问和修改私有变量" class="headerlink" title="访问和修改私有变量"></a>访问和修改私有变量</h2><p>有些三方库的私有属性我们需要做一些调整改变 ， 但是私有属性无法在外部直接访问 ， 这时我们就可以直接在外部进行key-value赋值</p>
+<h2 id="访问和修改私有变量"><a href="#访问和修改私有变量" class="headerlink" title="访问和修改私有变量"></a>访问和修改私有变量</h2><p>有些三方库的私有属性我们需要做一些调整改变 ， 但是私有属性无法在外部直接访问 ， 这时我们就可以直接在外部进行key-value赋值,</p>
+<p>比如我们在日常开发中遇到设计提出的各种弹窗 ， 我们看到样式与原生Apple提供给我们的不一样 ， 这时候我们就可以使用kvc对alert进行更改，<br>具体例子我会后续补充再github上….</p>
 <h2 id="Model和字典转换"><a href="#Model和字典转换" class="headerlink" title="Model和字典转换"></a>Model和字典转换</h2><p>客户端经常要发起网络请求 ， 当服务端反给我们response的时候先解析成Dictionary ， 不过在代码中直接使用dictionary进行操作 ， 修改视图等操作既不安全 ， 写起来也很烦 。<br>除了使用第三方model-dic解析框架外也可以自己实现一个基于KVC的dictionary解析helper 。</p>
 <blockquote>
 <p>日常中使用的KVC就是以上几个方面的了 ， 欢迎补充 。</p>
